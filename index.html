@@ -13,7 +13,6 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
     (function(){
-      // Initialized with your EmailJS Public Key
       emailjs.init("AEdo29P6XqXyT0ull");
     })();
   </script>
@@ -24,7 +23,6 @@
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-    // Your Active Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBoOBoJU3KwebaTQOf-mOc6bxUOt3KyEgU",
       authDomain: "partner-6e0a9.firebaseapp.com",
@@ -35,12 +33,10 @@
       measurementId: "G-W5E0B7YX06"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    // Make them globally available for form submit functions
     window.db = db;
     window.storage = storage;
     window.collection = collection;
@@ -695,6 +691,10 @@
 
     // Modal Control Functions
     function openCourierModal() {
+      document.getElementById('applyForm').classList.remove('hidden');
+      document.getElementById('applySuccessBox').classList.add('hidden');
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').innerHTML = 'TRIMITE CEREREA ÎN BURAQ FLEET';
       document.getElementById('courierModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
     }
@@ -704,6 +704,10 @@
     }
 
     function openRentalModal(modelName) {
+      document.getElementById('rentalForm').classList.remove('hidden');
+      document.getElementById('rentalSuccessState').classList.add('hidden');
+      document.getElementById('submitRentalBtn').disabled = false;
+      document.getElementById('submitRentalBtn').innerHTML = 'TRIMITE CEREREA DE ÎNCHIRIERE';
       document.getElementById('vehicleModelInput').value = modelName;
       document.getElementById('selectedVehicleLabel').innerText = modelName;
       document.getElementById('rentalModal').classList.remove('hidden');
