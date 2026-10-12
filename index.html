@@ -472,6 +472,18 @@
               <option value="Alt Oras">Alt Oraș</option>
             </select>
           </div>
+
+          <!-- Resident Permit Attachments (Front & Back) -->
+          <div class="grid sm:grid-cols-2 gap-3 pt-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Permis de Ședere / CI - Față *</label>
+              <input type="file" name="permit_front" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Permis de Ședere / CI - Spate *</label>
+              <input type="file" name="permit_back" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
+            </div>
+          </div>
         </div>
 
         <!-- 2. PFA -->
@@ -483,9 +495,15 @@
             <button type="button" onclick="selectPfa('nu')" id="pfaNo" class="border-2 border-red-600 bg-red-50 rounded-xl p-2.5 text-center font-bold text-xs text-red-700" data-i18n="btn_pfa_no">NU (Vreau prin SOLO)</button>
           </div>
           
-          <div id="pfaYesFields" class="hidden grid sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-            <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_cui">CUI PFA *</label><input type="text" name="cui_pfa" placeholder="RO12345678" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 outline-none"></div>
-            <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_pfa_name">Nume PFA *</label><input type="text" name="pfa_name" placeholder="Popescu Ion PFA" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 outline-none"></div>
+          <div id="pfaYesFields" class="hidden space-y-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_cui">CUI PFA *</label><input type="text" name="cui_pfa" placeholder="RO12345678" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 outline-none"></div>
+              <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_pfa_name">Nume PFA *</label><input type="text" name="pfa_name" placeholder="Popescu Ion PFA" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 outline-none"></div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Certificat PFA (Atasament) *</label>
+              <input type="file" id="pfaCertInput" name="pfa_certificate" accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-white border border-slate-300 rounded-xl px-3 py-2 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
+            </div>
           </div>
 
           <div id="pfaNoBanner" class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
@@ -654,7 +672,7 @@
         nav_pfa: "Colaborare PFA", nav_rentals: "Închirieri Flotă", nav_calc: "Calculează Câștig", nav_faq: "Întrebări Frecvente", btn_apply_now: "Aplică Curier", hero_badge: "Partener Oficial Flotă România", hero_title_1: "Livrează cu BURAQ.", hero_title_2: "Câștigă mai mult în fiecare săptămână.", hero_desc: "Alătură-te flotei partener oficial Glovo, Bolt Food și Wolt. Oferim plăți săptămânale la timp, comisioane corecte, suport 24/7 și vehicule de închiriat.", hero_cta: "Completează Formularul de Înscriere", hero_whatsapp: "Contact pe WhatsApp", calc_title: "Estimator Câștiguri", calc_veh_label: "Selectează Vehiculul:", veh_car: "Mașină", veh_scooter: "Scuter", veh_bike: "Bicicletă", calc_hours_label: "Ore lucrate pe săptămână:", calc_weekly: "Estimat Net Săptămânal:", calc_monthly: "Estimat Lunar (4 Săpt.):", calc_cta: "Vreau Să Încep Acum", pfa_badge: "Colaborare PFA - Taxe Minimale", pfa_title: "Nu ai un PFA? Îți poți deschide unul simplu prin partenerul nostru SOLO.", pfa_desc: "Păstrezi un procent mai mare din veniturile tale din livrare lucrând pe PFA.", pfa_btn: "Deschide PFA pe SOLO.ro", pfa_btn_already: "Am Deja PFA / Vreau SRL", pfa_benefits_title: "Avantaje Colaborare PFA:", pfa_b1: "Taxe reduse și deductibilitate combustibil.", pfa_b2: "Contabilitate automatizată și facturare facilă.", pfa_b3: "Plăți directe săptămânale în contul tău.", location_notice: "Serviciul de închirieri este disponibil în prezent exclusiv în Iași.", hero_title: "Închiriază un Vehicul din Flota BURAQ", hero_subtitle: "Alege dintre mașini electrice, scutere agile și e-bike-uri concepute special pentru livrări Glovo, Bolt Food și Wolt. Cu mentenanță și asigurare incluse.", car_sub: "Ideală pentru livrări auto confortabile în orice anotimp", spec_range: "Autonomie:", spec_charge: "Timp Încărcare:", spec_license: "Permis Necesat:", spec_city: "Disponibilitate:", car_f1: "RCA + CASCO cu acoperire completă incluse", car_f2: "Mentenanță, revizii și schimb anvelope de sezon", scooter_sub: "Navigație rapidă prin traficul aglomerat din oraș", spec_consump: "Consum Mediu:", spec_storage: "Echipare:", scooter_f1: "Ideal pentru parcări rapide în centrul orașului", scooter_f2: "Asistență tehnică și schimburi de ulei incluse", ebike_sub: "Livrări fără costuri de combustibil sau permis", spec_autonomy: "Autonomie Baterie:", spec_battery: "Baterie:", ebike_f1: "Costuri zero de carburant", ebike_f2: "Acces facil în zone pietonale", btn_rent_now: "Solicită Închiriere", modal_title: "Formular Închiriere Vehicul", lbl_client_name: "Nume Complet *", lbl_client_phone: "Număr de Telefon *", lbl_rental_city: "Oraș de Preluare *", city_note: "* Închirierile sunt disponibile momentan doar în Iași. Pentru alte orașe vă trecem pe lista de așteptare.", lbl_rental_duration: "Perioada Dorită de Închiriere *", dur_1w: "1 Săptămână", dur_2w: "2 Săptămâni", dur_1m: "1 Lună sau mai mult", lbl_license_upload: "Încarcă Permis de Conducere / CI *", btn_submit_rental: "TRIMITE CEREREA DE ÎNCHIRIERE", success_title: "Cerere Trimisă cu Succes!", success_desc: "Echipa BURAQ Rentals din Iași va analiza datele și te va contacta în cel mai scurt timp pentru predarea vehiculului.", faq_title: "Întrebări Frecvente", faq_q1: "Cât de repede pot începe să lucrez?", faq_a1: "Procesul de activare durează între 24 și 48 de ore.", app_title: "Formular Înscriere Curier BURAQ", app_subtitle: "Partener Glovo • Bolt Food • Wolt", sec_1: "1. Informații Personale", lbl_name: "Nume Complet *", lbl_phone: "Telefon *", lbl_email: "Email *", lbl_cnp: "CNP *", lbl_city: "Oraș *", sec_2: "2. Forma de Colaborare (PFA)", btn_pfa_yes: "DA (Am PFA)", btn_pfa_no: "NU (Vreau prin SOLO)", lbl_cui: "CUI PFA *", lbl_pfa_name: "Nume PFA *", solo_text: "💡 Deschide PFA online rapid prin SOLO.ro:", sec_3: "3. Vehicul & Închiriere Flotă", lbl_rental_q: "Ai nevoie să închiriezi un vehicul de la BURAQ?", pfa_yes: "DA", pfa_no: "NU", sec_4: "4. Detalii Bancare (Pentru Plată)", lbl_bank_holder: "Titular Cont *", lbl_bank_name: "Bancă *", lbl_iban: "IBAN (România) *", sec_5: "5. Platforme Dorite", btn_submit: "TRIMITE CEREREA ÎN BURAQ FLEET"
       },
       en: {
-        nav_pfa: "PFA Collaboration", nav_rentals: "Fleet Rentals", nav_calc: "Calculate Earnings", nav_faq: "FAQ", btn_apply_now: "Apply Courier", hero_badge: "Official Fleet Partner Romania", hero_title_1: "Deliver with BURAQ.", hero_title_2: "Earn more every week.", hero_desc: "Join the official fleet partner for Glovo, Bolt Food, and Wolt. We offer weekly payouts on time, fair commission rates, 24/7 support, and vehicle rentals.", hero_cta: "Fill Out Application Form", hero_whatsapp: "WhatsApp Chat", calc_title: "Earnings Estimator", calc_veh_label: "Select Vehicle:", veh_car: "Car", veh_scooter: "Scooter", veh_bike: "Bicycle", calc_hours_label: "Weekly Working Hours:", calc_weekly: "Est. Weekly Net:", calc_monthly: "Est. Monthly (4 Wks):", calc_cta: "Start Delivering Now", pfa_badge: "PFA Collaboration - Lowest Taxes", pfa_title: "Don't have a PFA? Easily open one with our partner SOLO.", pfa_desc: "Keep a larger percentage of your delivery income by working under a PFA.", pfa_btn: "Open PFA on SOLO.ro", pfa_btn_already: "I Already Have PFA / Want SRL", pfa_benefits_title: "PFA Advantages:", pfa_b1: "Lower taxes & fuel deductibility.", pfa_b2: "Automated accounting and easy invoicing.", pfa_b3: "Direct weekly payouts to your bank account.", location_notice: "Rental service is currently available exclusively in Iași.", hero_title: "Rent a Vehicle from BURAQ Fleet", hero_subtitle: "Choose from electric cars, agile scooters, and e-bikes engineered specifically for Glovo, Bolt Food, and Wolt deliveries. Maintenance and insurance included.", car_sub: "Ideal for comfortable all-season automobile delivery", spec_range: "Range:", spec_charge: "Charging Time:", spec_license: "License Required:", spec_city: "Availability:", car_f1: "Full RCA + CASCO Insurance Included", car_f2: "Maintenance & Seasonal Tire Service Included", scooter_sub: "Swift navigation through heavy urban traffic", spec_consump: "Avg. Consumption:", spec_storage: "Equipment:", scooter_f1: "Perfect for quick downtown parking", scooter_f2: "Technical assistance & oil changes included", ebike_sub: "Deliveries without fuel costs or driving license", spec_autonomy: "Battery Range:", spec_battery: "Battery:", ebike_f1: "Zero fuel expenses", ebike_f2: "Easy access to pedestrian zones", btn_rent_now: "Request Rental", modal_title: "Vehicle Rental Form", lbl_client_name: "Full Name *", lbl_client_phone: "Phone Number *", lbl_rental_city: "Pickup City *", city_note: "* Rentals are currently active only in Iași. Choosing other cities places you on our priority waitlist.", lbl_rental_duration: "Desired Rental Period *", dur_1w: "1 Week", dur_2w: "2 Weeks", dur_1m: "1 Month or more", lbl_license_upload: "Upload Driving License / ID *", btn_submit_rental: "SUBMIT RENTAL REQUEST", success_title: "Request Submitted Successfully!", success_desc: "BURAQ Rentals team in Iași will review your application and contact you shortly for vehicle handover.", faq_title: "Frequently Asked Questions", faq_q1: "How fast can I start working?", faq_a1: "Activation usually takes 24 to 48 hours.", app_title: "BURAQ Courier Application Form", app_subtitle: "Partner Glovo • Bolt Food • Wolt", sec_1: "1. Personal Information", lbl_name: "Full Name *", lbl_phone: "Phone Number *", lbl_email: "Email *", lbl_cnp: "CNP (ID Number) *", lbl_city: "City *", sec_2: "2. Collaboration Type (PFA)", btn_pfa_yes: "YES (I have PFA)", btn_pfa_no: "NO (Help via SOLO)", lbl_cui: "PFA CUI *", lbl_pfa_name: "Registered PFA Name *", solo_text: "💡 Open a PFA online quickly with SOLO.ro:", sec_3: "3. Vehicle Selection & Fleet Rental", lbl_rental_q: "Do you need to rent a vehicle from BURAQ?", pfa_yes: "YES", pfa_no: "NO", sec_4: "4. Bank Details (For Payouts)", lbl_bank_holder: "Account Holder *", lbl_bank_name: "Bank Name *", lbl_iban: "IBAN (Romania) *", sec_5: "5. Preferred Delivery Platforms", btn_submit: "SUBMIT APPLICATION TO BURAQ FLEET"
+        nav_pfa: "PFA Collaboration", nav_rentals: "Fleet Rentals", nav_calc: "Calculate Earnings", nav_faq: "FAQ", btn_apply_now: "Apply Courier", hero_badge: "Official Fleet Partner Romania", hero_title_1: "Deliver with BURAQ.", hero_title_2: "Earn more every week.", hero_desc: "Join the official fleet partner for Glovo, Bolt Food, and Wolt. We offer weekly payouts on time, fair commission rates, 24/7 support, and vehicle rentals.", hero_cta: "Fill Out Application Form", hero_whatsapp: "WhatsApp Chat", calc_title: "Earnings Estimator", calc_veh_label: "Select Vehicle:", veh_car: "Car", veh_scooter: "Scooter", veh_bike: "Bicycle", calc_hours_label: "Weekly Working Hours:", calc_weekly: "Est. Weekly Net:", calc_monthly: "Est. Monthly (4 Wks):", calc_cta: "Start Delivering Now", pfa_badge: "PFA Collaboration - Lowest Taxes", pfa_title: "Don't have a PFA? Easily open one with our partner SOLO.", pfa_desc: "Keep a larger percentage of your delivery income by working under a PFA.", pfa_btn: "Open PFA on SOLO.ro", pfa_btn_already: "I Already Have PFA / Want SRL", pfa_benefits_title: "PFA Advantages:", pfa_b1: "Lower taxes & fuel deductibility.", pfa_b2: "Automated accounting and easy invoicing.", pfa_b3: "Direct weekly payouts to your bank account.", location_notice: "Rental service is currently available exclusively in Iași.", hero_title: "Rent a Vehicle from BURAQ Fleet", hero_subtitle: "Choose from electric cars, agile scooters, and e-bikes engineered specifically for Glovo, Bolt Food, and Wolt deliveries. Maintenance and insurance included.", car_sub: "Ideal for comfortable all-season automobile delivery", spec_range: "Range:", spec_charge: "Charging Time:", spec_license: "License Required:", spec_city: "Availability:", car_f1: "Full RCA + CASCO Insurance Included", car_f2: "Maintenance & Seasonal Tire Service Included", scooter_sub: "Swift navigation through heavy urban traffic", spec_consump: "Avg. Consumption:", spec_storage: "Equipment:", scooter_f1: "Perfect for quick downtown parking", scooter_f2: "Technical assistance & oil changes included", ebike_sub: "Deliveries without fuel costs or driving license", spec_autonomy: "Battery Range:", spec_battery: "Battery:", ebike_f1: "Zero fuel expenses", ebike_f2: "Access facil în zone pietonale", btn_rent_now: "Request Rental", modal_title: "Vehicle Rental Form", lbl_client_name: "Full Name *", lbl_client_phone: "Phone Number *", lbl_rental_city: "Pickup City *", city_note: "* Rentals are currently active only in Iași. Choosing other cities places you on our priority waitlist.", lbl_rental_duration: "Desired Rental Period *", dur_1w: "1 Week", dur_2w: "2 Weeks", dur_1m: "1 Month or more", lbl_license_upload: "Upload Driving License / ID *", btn_submit_rental: "SUBMIT RENTAL REQUEST", success_title: "Request Submitted Successfully!", success_desc: "BURAQ Rentals team in Iași will review your application and contact you shortly for vehicle handover.", faq_title: "Frequently Asked Questions", faq_q1: "How fast can I start working?", faq_a1: "Activation usually takes 24 to 48 hours.", app_title: "BURAQ Courier Application Form", app_subtitle: "Partner Glovo • Bolt Food • Wolt", sec_1: "1. Personal Information", lbl_name: "Full Name *", lbl_phone: "Phone Number *", lbl_email: "Email *", lbl_cnp: "CNP (ID Number) *", lbl_city: "City *", sec_2: "2. Collaboration Type (PFA)", btn_pfa_yes: "YES (I have PFA)", btn_pfa_no: "NO (Help via SOLO)", lbl_cui: "PFA CUI *", lbl_pfa_name: "Registered PFA Name *", solo_text: "💡 Open a PFA online quickly with SOLO.ro:", sec_3: "3. Vehicle Selection & Fleet Rental", lbl_rental_q: "Do you need to rent a vehicle from BURAQ?", pfa_yes: "YES", pfa_no: "NO", sec_4: "4. Bank Details (For Payouts)", lbl_bank_holder: "Account Holder *", lbl_bank_name: "Bank Name *", lbl_iban: "IBAN (Romania) *", sec_5: "5. Preferred Delivery Platforms", btn_submit: "SUBMIT APPLICATION TO BURAQ FLEET"
       }
     };
 
@@ -723,7 +741,18 @@
       document.getElementById('hasPfaInput').value = val;
       document.getElementById('pfaYes').className = val==='da' ? "border-2 border-red-600 bg-red-50 rounded-xl p-2.5 text-center font-bold text-xs text-red-700" : "border border-slate-300 bg-slate-50 rounded-xl p-2.5 text-center font-bold text-xs text-slate-700";
       document.getElementById('pfaNo').className = val==='nu' ? "border-2 border-red-600 bg-red-50 rounded-xl p-2.5 text-center font-bold text-xs text-red-700" : "border border-slate-300 bg-slate-50 rounded-xl p-2.5 text-center font-bold text-xs text-slate-700";
-      document.getElementById('pfaYesFields').classList.toggle('hidden', val !== 'da');
+      
+      const pfaFields = document.getElementById('pfaYesFields');
+      const pfaCert = document.getElementById('pfaCertInput');
+      
+      if(val === 'da') {
+        pfaFields.classList.remove('hidden');
+        pfaCert.setAttribute('required', 'required');
+      } else {
+        pfaFields.classList.add('hidden');
+        pfaCert.removeAttribute('required');
+      }
+      
       document.getElementById('pfaNoBanner').style.display = val==='nu' ? 'flex' : 'none';
     }
 
@@ -742,7 +771,7 @@
       document.getElementById('rentalChoice').style.display = val==='da' ? 'block' : 'none';
     }
 
-    // Form Submissions (Firebase + EmailJS to buraqsrl@gmail.com)
+    // Form Submissions (Firebase + Upload Files + EmailJS)
     async function submitApplication(e) {
       e.preventDefault();
       const btn = document.getElementById('submitBtn'); 
@@ -750,15 +779,48 @@
       btn.innerHTML = 'Se trimite...';
       
       try {
-        const formData = new FormData(e.target);
+        const form = e.target;
+        const formData = new FormData(form);
         const dataObj = {};
-        formData.forEach((value, key) => { dataObj[key] = value; });
+        formData.forEach((value, key) => { 
+          if(typeof value === 'string') dataObj[key] = value; 
+        });
         
         dataObj.platforms = [];
-        if(e.target.glovo.checked) dataObj.platforms.push('Glovo');
-        if(e.target.bolt.checked) dataObj.platforms.push('Bolt');
-        if(e.target.wolt.checked) dataObj.platforms.push('Wolt');
+        if(form.glovo.checked) dataObj.platforms.push('Glovo');
+        if(form.bolt.checked) dataObj.platforms.push('Bolt');
+        if(form.wolt.checked) dataObj.platforms.push('Wolt');
 
+        // Upload Resident Permit Front
+        let frontUrl = "";
+        if(form.permit_front && form.permit_front.files[0]) {
+          const file = form.permit_front.files[0];
+          const sRef = window.ref(window.storage, `permits/front_${Date.now()}_${file.name}`);
+          const snap = await window.uploadBytes(sRef, file);
+          frontUrl = await window.getDownloadURL(snap.ref);
+        }
+
+        // Upload Resident Permit Back
+        let backUrl = "";
+        if(form.permit_back && form.permit_back.files[0]) {
+          const file = form.permit_back.files[0];
+          const sRef = window.ref(window.storage, `permits/back_${Date.now()}_${file.name}`);
+          const snap = await window.uploadBytes(sRef, file);
+          backUrl = await window.getDownloadURL(snap.ref);
+        }
+
+        // Upload PFA Certificate if user has PFA
+        let pfaCertUrl = "N/A";
+        if(dataObj.has_pfa === 'da' && form.pfa_certificate && form.pfa_certificate.files[0]) {
+          const file = form.pfa_certificate.files[0];
+          const sRef = window.ref(window.storage, `pfa_certs/${Date.now()}_${file.name}`);
+          const snap = await window.uploadBytes(sRef, file);
+          pfaCertUrl = await window.getDownloadURL(snap.ref);
+        }
+
+        dataObj.permitFrontUrl = frontUrl;
+        dataObj.permitBackUrl = backUrl;
+        dataObj.pfaCertificateUrl = pfaCertUrl;
         dataObj.submittedAt = new Date();
 
         // 1. Save to Firebase Firestore
@@ -773,14 +835,19 @@
           city: dataObj.city,
           cnp: dataObj.cnp,
           has_pfa: dataObj.has_pfa,
+          cui_pfa: dataObj.cui_pfa || 'N/A',
+          pfa_name: dataObj.pfa_name || 'N/A',
           selected_vehicle: dataObj.selected_vehicle,
           platforms: dataObj.platforms.join(', '),
-          iban: dataObj.iban
+          iban: dataObj.iban,
+          permit_front_link: frontUrl,
+          permit_back_link: backUrl,
+          pfa_cert_link: pfaCertUrl
         };
 
         await emailjs.send("service_ykjmoed", "template_u4wcx3e", emailParams);
 
-        document.getElementById('applyForm').classList.add('hidden');
+        form.classList.add('hidden');
         document.getElementById('applySuccessBox').classList.remove('hidden');
       } catch (err) {
         console.error(err);
