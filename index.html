@@ -13,8 +13,8 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
     (function(){
-      // Initialize EmailJS with your public key (Replace with your actual public key from emailjs.com if needed)
-      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+      // Initialized with your EmailJS Public Key
+      emailjs.init("AEdo29P6XqXyT0ull");
     })();
   </script>
 
@@ -738,7 +738,7 @@
       document.getElementById('rentalChoice').style.display = val==='da' ? 'block' : 'none';
     }
 
-    // Form Submissions (Firebase + Email to buraqsrl@gmail.com)
+    // Form Submissions (Firebase + EmailJS to buraqsrl@gmail.com)
     async function submitApplication(e) {
       e.preventDefault();
       const btn = document.getElementById('submitBtn'); 
@@ -761,7 +761,6 @@
         await window.addDoc(window.collection(window.db, "courier_applications"), dataObj);
 
         // 2. Send Email via EmailJS to buraqsrl@gmail.com
-        // Make sure to create a template in EmailJS dashboard with parameters: to_email, name, phone, email, city, cnp, etc.
         const emailParams = {
           to_email: "buraqsrl@gmail.com",
           name: dataObj.name,
@@ -775,8 +774,7 @@
           iban: dataObj.iban
         };
 
-        // Replace YOUR_SERVICE_ID and YOUR_TEMPLATE_ID with your EmailJS credentials
-        await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailParams);
+        await emailjs.send("service_ykjmoed", "template_u4wcx3e", emailParams);
 
         document.getElementById('applyForm').classList.add('hidden');
         document.getElementById('applySuccessBox').classList.remove('hidden');
