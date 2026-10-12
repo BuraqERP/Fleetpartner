@@ -9,6 +9,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      // Initialize EmailJS with your public key (Replace with your actual public key from emailjs.com if needed)
+      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+    })();
+  </script>
 
   <!-- Firebase SDKs (Modular CDN) -->
   <script type="module">
@@ -46,23 +54,23 @@
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #0b0f19;
-      color: #f3f4f6;
+      background-color: #f8fafc;
+      color: #0f172a;
     }
     .modal-backdrop {
-      background: rgba(5, 7, 12, 0.85);
+      background: rgba(15, 23, 42, 0.7);
       backdrop-filter: blur(8px);
     }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: #e2e8f0; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #E51B24; }
   </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
 
   <!-- ================= HEADER & NAVIGATION ================= -->
-  <header class="sticky top-0 z-40 bg-[#0b0f19]/95 backdrop-blur-md border-b border-gray-800">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
       
       <!-- Logo -->
@@ -74,30 +82,30 @@
           <path d="M 80 280 Q 190 250 280 330 Q 160 300 90 335 Z" fill="#ffffff" />
         </svg>
         <div class="flex flex-col">
-          <span class="text-xl sm:text-2xl font-black italic tracking-wider text-white leading-none">BURAQ</span>
-          <span class="text-[9px] sm:text-[10px] font-bold tracking-widest text-gray-400 uppercase leading-tight mt-0.5">Delivery & Rentals</span>
+          <span class="text-xl sm:text-2xl font-black italic tracking-wider text-slate-900 leading-none">BURAQ</span>
+          <span class="text-[9px] sm:text-[10px] font-bold tracking-widest text-slate-500 uppercase leading-tight mt-0.5">Delivery & Rentals</span>
         </div>
       </a>
 
       <!-- Navigation Links -->
       <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-semibold">
-        <a href="#pfa" class="text-gray-300 hover:text-white transition flex items-center gap-1.5">
-          <span class="bg-red-500/10 text-red-400 text-[10px] px-2 py-0.5 rounded border border-red-500/20 font-bold">SOLO</span>
+        <a href="#pfa" class="text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+          <span class="bg-red-50 text-red-600 text-[10px] px-2 py-0.5 rounded border border-red-200 font-bold">SOLO</span>
           <span data-i18n="nav_pfa">Colaborare PFA</span>
         </a>
-        <a href="#rentals" class="text-gray-300 hover:text-white transition" data-i18n="nav_rentals">Închirieri Flotă</a>
-        <a href="#calculator" class="text-gray-300 hover:text-white transition" data-i18n="nav_calc">Calculează Câștig</a>
-        <a href="#faq" class="text-gray-300 hover:text-white transition" data-i18n="nav_faq">Întrebări Frecvente</a>
+        <a href="#rentals" class="text-slate-600 hover:text-slate-900 transition" data-i18n="nav_rentals">Închirieri Flotă</a>
+        <a href="#calculator" class="text-slate-600 hover:text-slate-900 transition" data-i18n="nav_calc">Calculează Câștig</a>
+        <a href="#faq" class="text-slate-600 hover:text-slate-900 transition" data-i18n="nav_faq">Întrebări Frecvente</a>
       </nav>
 
       <!-- Actions -->
       <div class="flex items-center gap-2 sm:gap-3">
-        <button id="langToggle" onclick="toggleLanguage()" class="flex items-center gap-1.5 bg-gray-800 hover:bg-gray-700 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold transition border border-gray-700">
+        <button id="langToggle" onclick="toggleLanguage()" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold transition border border-slate-300 text-slate-700">
           <span id="langFlag">🇷🇴</span>
           <span id="langText">RO</span>
         </button>
 
-        <button onclick="openCourierModal()" class="bg-[#E51B24] hover:bg-red-700 text-white font-bold px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm transition shadow-lg shadow-red-600/30 flex items-center gap-1.5 sm:gap-2">
+        <button onclick="openCourierModal()" class="bg-[#E51B24] hover:bg-red-700 text-white font-bold px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm transition shadow-lg shadow-red-600/20 flex items-center gap-1.5 sm:gap-2">
           <span data-i18n="btn_apply_now">Aplică Curier</span>
           <i data-lucide="arrow-right" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
         </button>
@@ -108,32 +116,32 @@
 
 
   <!-- ================= HERO SECTION ================= -->
-  <section id="top" class="relative py-10 sm:py-16 lg:py-20 overflow-hidden">
+  <section id="top" class="relative py-10 sm:py-16 lg:py-20 overflow-hidden bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         
         <div class="lg:col-span-7 space-y-4 sm:space-y-6 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+          <div class="inline-flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider">
             <i data-lucide="shield-check" class="w-4 h-4"></i>
             <span data-i18n="hero_badge">Partener Oficial Flotă România</span>
           </div>
 
-          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
             <span data-i18n="hero_title_1">Livrează cu BURAQ.</span><br/>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400" data-i18n="hero_title_2">Câștigă mai mult în fiecare săptămână.</span>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-orange-500 to-amber-500" data-i18n="hero_title_2">Câștigă mai mult în fiecare săptămână.</span>
           </h1>
 
-          <p class="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed" data-i18n="hero_desc">
+          <p class="text-slate-600 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed" data-i18n="hero_desc">
             Alătură-te flotei partener oficial Glovo, Bolt Food și Wolt. Oferim plăți săptămânale la timp, comisioane corecte, suport 24/7 și vehicule de închiriat pentru curieri.
           </p>
 
           <div class="pt-2 sm:pt-4 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-            <button onclick="openCourierModal()" class="w-full sm:w-auto bg-[#E51B24] hover:bg-red-700 text-white font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl text-sm sm:text-base transition shadow-xl shadow-red-600/30 flex items-center justify-center gap-2.5">
+            <button onclick="openCourierModal()" class="w-full sm:w-auto bg-[#E51B24] hover:bg-red-700 text-white font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl text-sm sm:text-base transition shadow-xl shadow-red-600/20 flex items-center justify-center gap-2.5">
               <span data-i18n="hero_cta">Completează Formularul de Înscriere</span>
               <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
             </button>
 
-            <a href="https://wa.me/40773420491" target="_blank" class="w-full sm:w-auto bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-400 font-bold px-6 py-3.5 rounded-xl text-sm sm:text-base transition flex items-center justify-center gap-2.5">
+            <a href="https://wa.me/40773420491" target="_blank" class="w-full sm:w-auto bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-700 font-bold px-6 py-3.5 rounded-xl text-sm sm:text-base transition flex items-center justify-center gap-2.5">
               <i data-lucide="message-square" class="w-4 h-4 sm:w-5 sm:h-5"></i>
               <span data-i18n="hero_whatsapp">Contact pe WhatsApp</span>
             </a>
@@ -142,27 +150,27 @@
 
         <!-- Earnings Calculator -->
         <div class="lg:col-span-5 pt-4 lg:pt-0" id="calculator">
-          <div class="bg-gray-900 border border-gray-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-5 sm:space-y-6 shadow-2xl">
-            <div class="flex items-center justify-between border-b border-gray-800 pb-3 sm:pb-4">
-              <h3 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                <i data-lucide="calculator" class="text-red-500 w-5 h-5"></i>
+          <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-5 sm:space-y-6 shadow-xl">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 sm:pb-4">
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+                <i data-lucide="calculator" class="text-red-600 w-5 h-5"></i>
                 <span data-i18n="calc_title">Estimator Câștiguri</span>
               </h3>
-              <span class="bg-emerald-500/10 text-emerald-400 text-[10px] sm:text-xs px-2.5 py-1 rounded-full font-semibold">RON / Săptămână</span>
+              <span class="bg-emerald-50 text-emerald-700 text-[10px] sm:text-xs px-2.5 py-1 rounded-full font-semibold border border-emerald-200">RON / Săptămână</span>
             </div>
 
             <div class="space-y-2">
-              <label class="text-xs font-semibold text-gray-400" data-i18n="calc_veh_label">Selectează Vehiculul:</label>
+              <label class="text-xs font-semibold text-slate-600" data-i18n="calc_veh_label">Selectează Vehiculul:</label>
               <div class="grid grid-cols-3 gap-2">
-                <button onclick="setCalcVehicle('car', 45)" id="btnVehCar" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-600/20 border border-red-500 text-white flex flex-col items-center gap-1 text-xs font-bold">
+                <button onclick="setCalcVehicle('car', 45)" id="btnVehCar" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-50 border border-red-300 text-red-700 flex flex-col items-center gap-1 text-xs font-bold">
                   <i data-lucide="car" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                   <span data-i18n="veh_car">Mașină</span>
                 </button>
-                <button onclick="setCalcVehicle('scooter', 38)" id="btnVehScooter" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 flex flex-col items-center gap-1 text-xs font-bold">
+                <button onclick="setCalcVehicle('scooter', 38)" id="btnVehScooter" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:border-slate-300 flex flex-col items-center gap-1 text-xs font-bold">
                   <i data-lucide="bike" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                   <span data-i18n="veh_scooter">Scuter</span>
                 </button>
-                <button onclick="setCalcVehicle('bike', 30)" id="btnVehBike" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 flex flex-col items-center gap-1 text-xs font-bold">
+                <button onclick="setCalcVehicle('bike', 30)" id="btnVehBike" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:border-slate-300 flex flex-col items-center gap-1 text-xs font-bold">
                   <i data-lucide="footprints" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                   <span data-i18n="veh_bike">Bicicletă</span>
                 </button>
@@ -171,20 +179,20 @@
 
             <div class="space-y-2.5">
               <div class="flex justify-between text-xs sm:text-sm">
-                <span class="text-gray-400" data-i18n="calc_hours_label">Ore lucrate pe săptămână:</span>
-                <span class="font-bold text-white"><span id="hoursVal">40</span> ore</span>
+                <span class="text-slate-600" data-i18n="calc_hours_label">Ore lucrate pe săptămână:</span>
+                <span class="font-bold text-slate-950"><span id="hoursVal">40</span> ore</span>
               </div>
-              <input type="range" id="hoursSlider" min="10" max="70" value="40" oninput="updateEarnings()" class="w-full accent-red-600 bg-gray-800 rounded-lg cursor-pointer h-2">
+              <input type="range" id="hoursSlider" min="10" max="70" value="40" oninput="updateEarnings()" class="w-full accent-red-600 bg-slate-200 rounded-lg cursor-pointer h-2">
             </div>
 
-            <div class="bg-gray-950 p-3.5 sm:p-4 rounded-2xl border border-gray-800 space-y-2">
+            <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-2">
               <div class="flex justify-between items-baseline">
-                <span class="text-xs text-gray-400" data-i18n="calc_weekly">Estimat Net Săptămânal:</span>
-                <span class="text-xl sm:text-2xl font-black text-emerald-400" id="weeklyVal">1.800 RON</span>
+                <span class="text-xs text-slate-500" data-i18n="calc_weekly">Estimat Net Săptămânal:</span>
+                <span class="text-xl sm:text-2xl font-black text-emerald-600" id="weeklyVal">1.800 RON</span>
               </div>
-              <div class="flex justify-between items-baseline border-t border-gray-800 pt-2">
-                <span class="text-xs text-gray-400" data-i18n="calc_monthly">Estimat Lunar (4 Săpt.):</span>
-                <span class="text-lg sm:text-xl font-bold text-white" id="monthlyVal">7.200 RON</span>
+              <div class="flex justify-between items-baseline border-t border-slate-200 pt-2">
+                <span class="text-xs text-slate-500" data-i18n="calc_monthly">Estimat Lunar (4 Săpt.):</span>
+                <span class="text-lg sm:text-xl font-bold text-slate-900" id="monthlyVal">7.200 RON</span>
               </div>
             </div>
 
@@ -201,45 +209,45 @@
 
 
   <!-- ================= PFA SECTION ================= -->
-  <section id="pfa" class="py-12 sm:py-16 bg-gray-900/50 border-y border-gray-800">
+  <section id="pfa" class="py-12 sm:py-16 bg-slate-100 border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="bg-gradient-to-r from-emerald-950/40 via-gray-900 to-gray-900 border border-emerald-500/30 rounded-2xl sm:rounded-3xl p-6 sm:p-10">
+      <div class="bg-white border border-emerald-200 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-sm">
         <div class="grid lg:grid-cols-12 gap-6 sm:gap-8 items-center">
           <div class="lg:col-span-8 space-y-3 sm:space-y-4">
-            <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold">
+            <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold">
               <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
               <span data-i18n="pfa_badge">Colaborare PFA - Taxe Minimale</span>
             </div>
             
-            <h2 class="text-xl sm:text-3xl font-extrabold text-white leading-snug" data-i18n="pfa_title">
+            <h2 class="text-xl sm:text-3xl font-extrabold text-slate-900 leading-snug" data-i18n="pfa_title">
               Nu ai un PFA? Îți poți deschide unul simplu prin partenerul nostru SOLO.
             </h2>
             
-            <p class="text-gray-300 text-xs sm:text-base leading-relaxed" data-i18n="pfa_desc">
+            <p class="text-slate-600 text-xs sm:text-base leading-relaxed" data-i18n="pfa_desc">
               Păstrezi un procent mai mare din veniturile tale din livrare lucrând pe PFA. SOLO se ocupă de întreaga ta contabilitate și înființare 100% online.
             </p>
 
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
-              <a href="https://pfa.solo.ro/register/vreau-pfa" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-gray-950 font-bold px-5 py-3 rounded-xl transition text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+              <a href="https://pfa.solo.ro/register/vreau-pfa" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl transition text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20">
                 <span data-i18n="pfa_btn">Deschide PFA pe SOLO.ro</span>
                 <i data-lucide="external-link" class="w-4 h-4"></i>
               </a>
 
-              <button onclick="openCourierModal()" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-5 py-3 rounded-xl transition text-xs sm:text-sm border border-gray-700">
+              <button onclick="openCourierModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold px-5 py-3 rounded-xl transition text-xs sm:text-sm border border-slate-300">
                 <span data-i18n="pfa_btn_already">Am Deja PFA / Vreau SRL</span>
               </button>
             </div>
           </div>
 
-          <div class="lg:col-span-4 bg-gray-950/80 p-5 rounded-2xl border border-gray-800 space-y-3">
-            <h4 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-              <i data-lucide="sparkles" class="text-emerald-400 w-4 h-4"></i>
+          <div class="lg:col-span-4 bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="sparkles" class="text-emerald-600 w-4 h-4"></i>
               <span data-i18n="pfa_benefits_title">Avantaje Colaborare PFA:</span>
             </h4>
-            <ul class="text-xs text-gray-300 space-y-2">
-              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i><span data-i18n="pfa_b1">Taxe reduse și deductibilitate combustibil / vehicul.</span></li>
-              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i><span data-i18n="pfa_b2">Contabilitate automatizată și facturare facilă.</span></li>
-              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i><span data-i18n="pfa_b3">Plăți directe săptămânale în contul tău bancar.</span></li>
+            <ul class="text-xs text-slate-600 space-y-2">
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i><span data-i18n="pfa_b1">Taxe reduse și deductibilitate combustibil / vehicul.</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i><span data-i18n="pfa_b2">Contabilitate automatizată și facturare facilă.</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i><span data-i18n="pfa_b3">Plăți directe săptămânale în contul tău bancar.</span></li>
             </ul>
           </div>
         </div>
@@ -249,12 +257,12 @@
 
 
   <!-- ================= FLEET RENTALS SECTION ================= -->
-  <section id="rentals" class="py-12 sm:py-16 bg-slate-100 text-slate-900 border-b border-slate-300">
+  <section id="rentals" class="py-12 sm:py-16 bg-white text-slate-900 border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
       
       <div class="text-center space-y-3">
         <!-- Location Notice Banner -->
-        <div class="inline-flex items-center gap-2 bg-emerald-100 border border-emerald-300 text-emerald-800 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-sm">
+        <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-sm">
           <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
           <span data-i18n="location_notice">Serviciul de închirieri este disponibil în prezent exclusiv în <strong>Iași</strong>.</span>
         </div>
@@ -271,10 +279,10 @@
       <div class="grid md:grid-cols-3 gap-6 sm:gap-8 pt-4">
         
         <!-- CARD 1: DACIA SPRING -->
-        <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
           <div class="space-y-3.5">
-            <div class="bg-slate-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
-              <span class="absolute top-3 right-3 bg-red-100 border border-red-200 text-red-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">100% Electric</span>
+            <div class="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
+              <span class="absolute top-3 right-3 bg-red-50 border border-red-200 text-red-600 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">100% Electric</span>
               <i data-lucide="car" class="w-16 h-16 sm:w-20 sm:h-20 text-red-600 mx-auto"></i>
             </div>
 
@@ -283,14 +291,14 @@
               <p class="text-xs text-slate-500" data-i18n="car_sub">Ideală pentru livrări auto confortabile în orice anotimp</p>
             </div>
 
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_range">Autonomie:</span> <span class="font-bold text-slate-900">220 km</span></div>
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_charge">Timp Încărcare:</span> <span class="font-bold text-slate-900">Rapid DC / AC Home</span></div>
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesat:</span> <span class="font-bold text-slate-900">Cat. B</span></div>
-              <div class="flex justify-between border-t border-slate-200 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
+              <div class="flex justify-between border-t border-slate-100 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-600 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
             </div>
 
-            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-100 pt-3">
+            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-200 pt-3">
               <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-red-600 shrink-0"></i> <span data-i18n="car_f1">RCA + CASCO cu acoperire completă incluse</span></li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-red-600 shrink-0"></i> <span data-i18n="car_f2">Mentenanță, revizii și schimb anvelope de sezon</span></li>
             </ul>
@@ -303,11 +311,11 @@
         </div>
 
         <!-- CARD 2: SCOOTER -->
-        <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
           <div class="space-y-3.5">
-            <div class="bg-slate-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
-              <span class="absolute top-3 right-3 bg-orange-100 border border-orange-200 text-orange-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Agil & Rapid</span>
-              <i data-lucide="bike" class="w-16 h-16 sm:w-20 sm:h-20 text-orange-500 mx-auto"></i>
+            <div class="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
+              <span class="absolute top-3 right-3 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Agil & Rapid</span>
+              <i data-lucide="bike" class="w-16 h-16 sm:w-20 sm:h-20 text-amber-600 mx-auto"></i>
             </div>
 
             <div>
@@ -315,16 +323,16 @@
               <p class="text-xs text-slate-500" data-i18n="scooter_sub">Navigație rapidă prin traficul aglomerat din oraș</p>
             </div>
 
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_consump">Consum Mediu:</span> <span class="font-bold text-slate-900">2.2 L / 100km</span></div>
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_storage">Echipare:</span> <span class="font-bold text-slate-900">Cutie Termoizolantă Inclusă</span></div>
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesat:</span> <span class="font-bold text-slate-900">Cat. A1 / A / B</span></div>
-              <div class="flex justify-between border-t border-slate-200 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
+              <div class="flex justify-between border-t border-slate-100 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-600 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
             </div>
 
-            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-100 pt-3">
-              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-orange-500 shrink-0"></i> <span data-i18n="scooter_f1">Ideal pentru parcări rapide în centrul orașului</span></li>
-              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-orange-500 shrink-0"></i> <span data-i18n="scooter_f2">Asistență tehnică și schimburi de ulei incluse</span></li>
+            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-200 pt-3">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-amber-600 shrink-0"></i> <span data-i18n="scooter_f1">Ideal pentru parcări rapide în centrul orașului</span></li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-amber-600 shrink-0"></i> <span data-i18n="scooter_f2">Asistență tehnică și schimburi de ulei incluse</span></li>
             </ul>
           </div>
 
@@ -335,10 +343,10 @@
         </div>
 
         <!-- CARD 3: E-BIKE -->
-        <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
           <div class="space-y-3.5">
-            <div class="bg-slate-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
-              <span class="absolute top-3 right-3 bg-emerald-100 border border-emerald-200 text-emerald-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Fără Permis</span>
+            <div class="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
+              <span class="absolute top-3 right-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Fără Permis</span>
               <i data-lucide="zap" class="w-16 h-16 sm:w-20 sm:h-20 text-emerald-600 mx-auto"></i>
             </div>
 
@@ -347,14 +355,14 @@
               <p class="text-xs text-slate-500" data-i18n="ebike_sub">Livrări fără costuri de combustibil sau permis</p>
             </div>
 
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_autonomy">Autonomie Baterie:</span> <span class="font-bold text-slate-900">80 km / încărcare</span></div>
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_battery">Baterie:</span> <span class="font-bold text-slate-900">Detașabilă</span></div>
-              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesat:</span> <span class="font-bold text-emerald-700">NU e nevoie de permis</span></div>
-              <div class="flex justify-between border-t border-slate-200 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesat:</span> <span class="font-bold text-emerald-600">NU e nevoie de permis</span></div>
+              <div class="flex justify-between border-t border-slate-100 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-600 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
             </div>
 
-            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-100 pt-3">
+            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-200 pt-3">
               <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> <span data-i18n="ebike_f1">Costuri zero de carburant</span></li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> <span data-i18n="ebike_f2">Acces facil în zone pietonale</span></li>
             </ul>
@@ -372,18 +380,18 @@
 
 
   <!-- ================= FAQ SECTION ================= -->
-  <section id="faq" class="py-12 sm:py-16 bg-gray-900/40 border-t border-gray-800">
+  <section id="faq" class="py-12 sm:py-16 bg-slate-100 border-t border-slate-200">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
       <div class="text-center space-y-2 sm:space-y-3">
-        <h2 class="text-2xl sm:text-3xl font-bold text-white" data-i18n="faq_title">Întrebări Frecvente</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900" data-i18n="faq_title">Întrebări Frecvente</h2>
       </div>
       <div class="space-y-3 sm:space-y-4">
-        <details class="bg-gray-900 border border-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-5 group">
-          <summary class="font-bold text-white cursor-pointer flex justify-between items-center text-xs sm:text-base">
+        <details class="bg-white border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-5 group shadow-sm">
+          <summary class="font-bold text-slate-900 cursor-pointer flex justify-between items-center text-xs sm:text-base">
             <span data-i18n="faq_q1">Cât de repede pot începe să lucrez?</span>
-            <i data-lucide="chevron-down" class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-open:rotate-180 transition"></i>
+            <i data-lucide="chevron-down" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 group-open:rotate-180 transition"></i>
           </summary>
-          <p class="text-xs sm:text-sm text-gray-400 mt-2.5 border-t border-gray-800 pt-2.5" data-i18n="faq_a1">Procesul de activare durează între 24 și 48 de ore de la trimiterea documentelor.</p>
+          <p class="text-xs sm:text-sm text-slate-600 mt-2.5 border-t border-slate-100 pt-2.5" data-i18n="faq_a1">Procesul de activare durează între 24 și 48 de ore de la trimiterea documentelor.</p>
         </details>
       </div>
     </div>
@@ -391,7 +399,7 @@
 
 
   <!-- ================= FOOTER ================= -->
-  <footer class="bg-gray-950 border-t border-gray-800 py-8 sm:py-12 text-xs text-gray-500">
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-8 sm:py-12 text-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
       <div class="flex items-center gap-2.5">
         <svg class="w-7 h-7 text-[#E51B24]" viewBox="0 0 500 500" fill="currentColor">
@@ -406,29 +414,29 @@
 
 
   <!-- ================= WHATSAPP FLOATING BUTTON ================= -->
-  <a href="https://wa.me/40773420491?text=Salut!%20Am%20o%20%C3%AEntrebare%20legat%C4%83%20de%20flota%20BURAQ." target="_blank" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 sm:p-4 rounded-full shadow-2xl transition flex items-center justify-center">
+  <a href="https://wa.me/40773420491?text=Salut!%20Am%20o%20%C3%AEntrebare%20legat%C4%83%20de%20flota%20BURAQ." target="_blank" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 sm:p-4 rounded-full shadow-2xl transition flex items-center justify-center">
     <i data-lucide="message-circle" class="w-6 h-6 sm:w-7 sm:h-7"></i>
   </a>
 
 
   <!-- ================= MODAL 1: COURIER APPLICATION ================= -->
   <div id="courierModal" class="fixed inset-0 z-50 hidden modal-backdrop overflow-y-auto p-3 sm:p-6 flex items-center justify-center">
-    <div class="bg-gray-900 border border-gray-800 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden relative my-auto">
+    <div class="bg-white border border-slate-200 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden relative my-auto text-slate-900">
       
       <!-- Modal Header -->
-      <div class="bg-gray-950 p-4 sm:p-6 border-b border-gray-800 flex items-center justify-between">
+      <div class="bg-slate-50 p-4 sm:p-6 border-b border-slate-200 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <svg class="w-7 h-7 sm:w-8 sm:h-8 text-[#E51B24] shrink-0" viewBox="0 0 500 500" fill="currentColor">
             <circle cx="250" cy="250" r="230" fill="#E51B24" />
             <path d="M 120 180 Q 230 150 320 250 Q 200 210 130 250 Z" fill="#ffffff" />
           </svg>
           <div>
-            <h3 class="text-sm sm:text-lg font-extrabold text-white leading-tight" data-i18n="app_title">Formular Înscriere Curier BURAQ</h3>
-            <p class="text-[10px] sm:text-xs text-gray-400" data-i18n="app_subtitle">Partener Glovo • Bolt Food • Wolt</p>
+            <h3 class="text-sm sm:text-lg font-extrabold text-slate-900 leading-tight" data-i18n="app_title">Formular Înscriere Curier BURAQ</h3>
+            <p class="text-[10px] sm:text-xs text-slate-500" data-i18n="app_subtitle">Partener Glovo • Bolt Food • Wolt</p>
           </div>
         </div>
 
-        <button onclick="closeCourierModal()" class="text-gray-400 hover:text-white p-1.5 rounded-lg bg-gray-800 transition">
+        <button onclick="closeCourierModal()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg bg-slate-100 transition">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -437,28 +445,28 @@
       <form id="applyForm" onsubmit="submitApplication(event)" class="p-4 sm:p-8 space-y-5">
         <!-- 1. Personal Info -->
         <div class="space-y-3">
-          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_1">1. Informații Personale</h4>
+          <h4 class="text-xs sm:text-sm font-bold text-red-600 uppercase tracking-wider border-b border-slate-200 pb-1" data-i18n="sec_1">1. Informații Personale</h4>
           <div class="grid sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_name">Nume Complet *</label>
-              <input type="text" name="name" required placeholder="ex: Ion Popescu" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+              <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_name">Nume Complet *</label>
+              <input type="text" name="name" required placeholder="ex: Ion Popescu" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-red-600">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_phone">Telefon *</label>
-              <input type="tel" name="phone" required placeholder="722000000" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+              <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_phone">Telefon *</label>
+              <input type="tel" name="phone" required placeholder="722000000" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-red-600">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_email">Email *</label>
-              <input type="email" name="email" required placeholder="nume@example.com" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+              <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_email">Email *</label>
+              <input type="email" name="email" required placeholder="nume@example.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-red-600">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_cnp">CNP *</label>
-              <input type="text" name="cnp" maxlength="13" required placeholder="1990101XXXXXX" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+              <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_cnp">CNP *</label>
+              <input type="text" name="cnp" maxlength="13" required placeholder="1990101XXXXXX" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-red-600">
             </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_city">Oraș *</label>
-            <select name="city" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+            <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_city">Oraș *</label>
+            <select name="city" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-red-600">
               <option value="Iasi">Iași</option>
               <option value="Bucuresti">București</option>
               <option value="Cluj-Napoca">Cluj-Napoca</option>
@@ -472,44 +480,44 @@
 
         <!-- 2. PFA -->
         <div class="space-y-3">
-          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_2">2. Forma de Colaborare (PFA)</h4>
+          <h4 class="text-xs sm:text-sm font-bold text-red-600 uppercase tracking-wider border-b border-slate-200 pb-1" data-i18n="sec_2">2. Forma de Colaborare (PFA)</h4>
           <input type="hidden" name="has_pfa" id="hasPfaInput" value="nu">
           <div class="grid grid-cols-2 gap-2">
-            <button type="button" onclick="selectPfa('da')" id="pfaYes" class="border border-gray-800 bg-gray-950 rounded-xl p-2.5 text-center font-bold text-xs text-white" data-i18n="btn_pfa_yes">DA (Am PFA)</button>
-            <button type="button" onclick="selectPfa('nu')" id="pfaNo" class="border-2 border-red-500 bg-red-500/10 rounded-xl p-2.5 text-center font-bold text-xs text-white" data-i18n="btn_pfa_no">NU (Vreau prin SOLO)</button>
+            <button type="button" onclick="selectPfa('da')" id="pfaYes" class="border border-slate-300 bg-slate-50 rounded-xl p-2.5 text-center font-bold text-xs text-slate-700" data-i18n="btn_pfa_yes">DA (Am PFA)</button>
+            <button type="button" onclick="selectPfa('nu')" id="pfaNo" class="border-2 border-red-600 bg-red-50 rounded-xl p-2.5 text-center font-bold text-xs text-red-700" data-i18n="btn_pfa_no">NU (Vreau prin SOLO)</button>
           </div>
           
-          <div id="pfaYesFields" class="hidden grid sm:grid-cols-2 gap-3 bg-gray-950 p-3.5 rounded-xl border border-gray-800">
-            <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_cui">CUI PFA *</label><input type="text" name="cui_pfa" placeholder="RO12345678" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-sm text-white outline-none"></div>
-            <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_pfa_name">Nume PFA *</label><input type="text" name="pfa_name" placeholder="Popescu Ion PFA" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-sm text-white outline-none"></div>
+          <div id="pfaYesFields" class="hidden grid sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_cui">CUI PFA *</label><input type="text" name="cui_pfa" placeholder="RO12345678" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 outline-none"></div>
+            <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_pfa_name">Nume PFA *</label><input type="text" name="pfa_name" placeholder="Popescu Ion PFA" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 outline-none"></div>
           </div>
 
-          <div id="pfaNoBanner" class="bg-emerald-950/30 border border-emerald-500/30 p-3 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-            <span class="text-xs text-emerald-400 font-bold" data-i18n="solo_text">💡 Deschide PFA online rapid prin SOLO.ro:</span>
-            <a href="https://pfa.solo.ro/register/vreau-pfa" target="_blank" class="bg-emerald-500 text-gray-950 text-xs font-bold px-3 py-1.5 rounded-lg w-full sm:w-auto text-center">SOLO.ro</a>
+          <div id="pfaNoBanner" class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <span class="text-xs text-emerald-800 font-bold" data-i18n="solo_text">💡 Deschide PFA online rapid prin SOLO.ro:</span>
+            <a href="https://pfa.solo.ro/register/vreau-pfa" target="_blank" class="bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg w-full sm:w-auto text-center shadow-sm">SOLO.ro</a>
           </div>
         </div>
 
         <!-- 3. Vehicle & Fleet Rental Choice -->
         <div class="space-y-3">
-          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_3">3. Vehicul & Închiriere Flotă</h4>
+          <h4 class="text-xs sm:text-sm font-bold text-red-600 uppercase tracking-wider border-b border-slate-200 pb-1" data-i18n="sec_3">3. Vehicul & Închiriere Flotă</h4>
           <input type="hidden" name="selected_vehicle" id="selectedVehicle" value="Car">
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <button type="button" onclick="selectVeh('Car')" id="vCar" class="border-2 border-red-500 bg-red-500/10 p-2.5 rounded-xl text-xs font-bold text-center text-white" data-i18n="veh_car">Mașină</button>
-            <button type="button" onclick="selectVeh('Motorcycle')" id="vMoto" class="border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-xs font-bold text-center text-gray-300" data-i18n="veh_scooter">Scuter</button>
-            <button type="button" onclick="selectVeh('Bicycle')" id="vBike" class="border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-xs font-bold text-center text-gray-300" data-i18n="veh_bike">Bicicletă</button>
-            <button type="button" onclick="selectVeh('EBike')" id="vEBike" class="border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-xs font-bold text-center text-gray-300">E-Bike</button>
+            <button type="button" onclick="selectVeh('Car')" id="vCar" class="border-2 border-red-600 bg-red-50 p-2.5 rounded-xl text-xs font-bold text-center text-red-700" data-i18n="veh_car">Mașină</button>
+            <button type="button" onclick="selectVeh('Motorcycle')" id="vMoto" class="border border-slate-300 bg-slate-50 p-2.5 rounded-xl text-xs font-bold text-center text-slate-700" data-i18n="veh_scooter">Scuter</button>
+            <button type="button" onclick="selectVeh('Bicycle')" id="vBike" class="border border-slate-300 bg-slate-50 p-2.5 rounded-xl text-xs font-bold text-center text-slate-700" data-i18n="veh_bike">Bicicletă</button>
+            <button type="button" onclick="selectVeh('EBike')" id="vEBike" class="border border-slate-300 bg-slate-50 p-2.5 rounded-xl text-xs font-bold text-center text-slate-700">E-Bike</button>
           </div>
           
-          <div class="bg-gray-950 p-3.5 rounded-xl border border-gray-800 space-y-2">
-            <label class="block text-xs font-bold text-white" data-i18n="lbl_rental_q">Ai nevoie să închiriezi un vehicul de la BURAQ?</label>
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2">
+            <label class="block text-xs font-bold text-slate-800" data-i18n="lbl_rental_q">Ai nevoie să închiriezi un vehicul de la BURAQ?</label>
             <input type="hidden" name="need_fleet_rental" id="needRentalInput" value="nu">
             <div class="grid grid-cols-2 gap-2">
-              <button type="button" onclick="selectNeedRental('da')" id="rentYes" class="border border-gray-800 p-2 rounded-lg text-xs font-bold text-white" data-i18n="pfa_yes">DA</button>
-              <button type="button" onclick="selectNeedRental('nu')" id="rentNo" class="border-2 border-red-500 bg-red-500/10 p-2 rounded-lg text-xs font-bold text-white" data-i18n="pfa_no">NU</button>
+              <button type="button" onclick="selectNeedRental('da')" id="rentYes" class="border border-slate-300 p-2 rounded-lg text-xs font-bold text-slate-700 bg-white" data-i18n="pfa_yes">DA</button>
+              <button type="button" onclick="selectNeedRental('nu')" id="rentNo" class="border-2 border-red-600 bg-red-50 p-2 rounded-lg text-xs font-bold text-red-700" data-i18n="pfa_no">NU</button>
             </div>
             <div id="rentalChoice" class="hidden pt-2">
-              <select name="requested_rental_model" class="w-full bg-gray-900 border border-gray-800 rounded-lg p-2 text-xs text-white">
+              <select name="requested_rental_model" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs text-slate-900">
                 <option value="Dacia Spring EV">Dacia Spring EV (Auto - Iași)</option>
                 <option value="Scuter 125cc">Scuter 125cc (Iași)</option>
                 <option value="E-Bike Pro">E-Bike Pro (Iași)</option>
@@ -520,21 +528,21 @@
 
         <!-- 4. Bank Details -->
         <div class="space-y-3">
-          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_4">4. Detalii Bancare (Pentru Plată)</h4>
+          <h4 class="text-xs sm:text-sm font-bold text-red-600 uppercase tracking-wider border-b border-slate-200 pb-1" data-i18n="sec_4">4. Detalii Bancare (Pentru Plată)</h4>
           <div class="grid sm:grid-cols-2 gap-3">
-            <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_bank_holder">Titular Cont *</label><input type="text" name="bank_holder" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500"></div>
-            <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_bank_name">Bancă *</label><input type="text" name="bank_name" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500"></div>
+            <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_bank_holder">Titular Cont *</label><input type="text" name="bank_holder" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-red-600"></div>
+            <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_bank_name">Bancă *</label><input type="text" name="bank_name" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-red-600"></div>
           </div>
-          <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_iban">IBAN (România) *</label><input type="text" name="iban" required placeholder="RO98 BTRL 0000 0000 0000 0000" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none font-mono focus:border-red-500"></div>
+          <div><label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_iban">IBAN (România) *</label><input type="text" name="iban" required placeholder="RO98 BTRL 0000 0000 0000 0000" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 outline-none font-mono focus:border-red-600"></div>
         </div>
 
         <!-- 5. Delivery Platforms (Unchecked by default) -->
         <div class="space-y-2">
-          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_5">5. Platforme Dorite</h4>
+          <h4 class="text-xs sm:text-sm font-bold text-red-600 uppercase tracking-wider border-b border-slate-200 pb-1" data-i18n="sec_5">5. Platforme Dorite</h4>
           <div class="grid grid-cols-3 gap-2">
-            <label class="p-2.5 bg-gray-950 border border-gray-800 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-white"><input type="checkbox" name="glovo" value="Glovo" class="accent-yellow-500"> Glovo</label>
-            <label class="p-2.5 bg-gray-950 border border-gray-800 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-white"><input type="checkbox" name="bolt" value="Bolt" class="accent-emerald-500"> Bolt</label>
-            <label class="p-2.5 bg-gray-950 border border-gray-800 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-white"><input type="checkbox" name="wolt" value="Wolt" class="accent-cyan-500"> Wolt</label>
+            <label class="p-2.5 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-slate-800"><input type="checkbox" name="glovo" value="Glovo" class="accent-yellow-500"> Glovo</label>
+            <label class="p-2.5 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-slate-800"><input type="checkbox" name="bolt" value="Bolt" class="accent-emerald-500"> Bolt</label>
+            <label class="p-2.5 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-slate-800"><input type="checkbox" name="wolt" value="Wolt" class="accent-cyan-500"> Wolt</label>
           </div>
         </div>
 
@@ -543,10 +551,10 @@
 
       <!-- Courier Application Success State -->
       <div id="applySuccessBox" class="hidden p-8 text-center space-y-4">
-        <i data-lucide="check-circle-2" class="w-12 h-12 text-emerald-400 mx-auto"></i>
-        <h3 class="text-xl font-bold text-white" data-i18n="success_title">Aplicația a fost trimisă cu succes!</h3>
-        <p class="text-xs text-gray-400" data-i18n="success_desc">Echipa BURAQ vă va contacta în cel mai scurt timp.</p>
-        <button onclick="closeCourierModal()" class="bg-gray-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold">Închide</button>
+        <i data-lucide="check-circle-2" class="w-12 h-12 text-emerald-600 mx-auto"></i>
+        <h3 class="text-xl font-bold text-slate-900" data-i18n="success_title">Aplicația a fost trimisă cu succes!</h3>
+        <p class="text-xs text-slate-600" data-i18n="success_desc">Echipa BURAQ vă va contacta în cel mai scurt timp.</p>
+        <button onclick="closeCourierModal()" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold">Închide</button>
       </div>
 
     </div>
@@ -580,20 +588,20 @@
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_client_name">Nume Complet *</label>
-          <input type="text" name="client_name" required placeholder="ex: Ion Popescu" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-500 outline-none">
+          <input type="text" name="client_name" required placeholder="ex: Ion Popescu" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_client_phone">Număr de Telefon *</label>
           <div class="flex">
             <span class="bg-slate-100 border border-r-0 border-slate-300 rounded-l-xl px-3 flex items-center text-xs text-slate-700 font-bold">🇷🇴 +40</span>
-            <input type="tel" name="client_phone" required placeholder="722 000 000" class="w-full bg-slate-50 border border-slate-300 rounded-r-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-500 outline-none">
+            <input type="tel" name="client_phone" required placeholder="722 000 000" class="w-full bg-slate-50 border border-slate-300 rounded-r-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_rental_city">Oraș de Preluare *</label>
-          <select name="rental_city" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 focus:border-red-500 outline-none font-bold">
+          <select name="rental_city" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 focus:border-red-600 outline-none font-bold">
             <option value="Iasi (Activ)" selected>Iași (Disponibil Acum)</option>
             <option value="Bucuresti (Lista Asteptare)">București (Listă de așteptare)</option>
             <option value="Cluj-Napoca (Lista Asteptare)">Cluj-Napoca (Listă de așteptare)</option>
@@ -604,7 +612,7 @@
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_rental_duration">Perioada Dorită de Închiriere *</label>
-          <select name="rental_duration" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 focus:border-red-500 outline-none">
+          <select name="rental_duration" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 focus:border-red-600 outline-none">
             <option value="1 Saptamana" data-i18n="dur_1w">1 Săptămână</option>
             <option value="2 Saptamani" data-i18n="dur_2w">2 Săptămâni</option>
             <option value="1 Luna+" data-i18n="dur_1m">1 Lună sau mai mult</option>
@@ -640,7 +648,7 @@
   </div>
 
 
-  <!-- ================= JAVASCRIPT & FIREBASE LOGIC ================= -->
+  <!-- ================= JAVASCRIPT & FIREBASE / EMAILJS LOGIC ================= -->
   <script>
     lucide.createIcons();
 
@@ -670,10 +678,10 @@
     let currentCalcRate = 45;
     function setCalcVehicle(type, rate) {
       currentCalcRate = rate;
-      document.querySelectorAll('.calc-veh-btn').forEach(b => b.className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 flex flex-col items-center gap-1 text-xs font-bold");
-      if(type==='car') document.getElementById('btnVehCar').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-600/20 border border-red-500 text-white flex flex-col items-center gap-1 text-xs font-bold";
-      if(type==='scooter') document.getElementById('btnVehScooter').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-600/20 border border-red-500 text-white flex flex-col items-center gap-1 text-xs font-bold";
-      if(type==='bike') document.getElementById('btnVehBike').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-600/20 border border-red-500 text-white flex flex-col items-center gap-1 text-xs font-bold";
+      document.querySelectorAll('.calc-veh-btn').forEach(b => b.className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:border-slate-300 flex flex-col items-center gap-1 text-xs font-bold");
+      if(type==='car') document.getElementById('btnVehCar').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-50 border border-red-300 text-red-700 flex flex-col items-center gap-1 text-xs font-bold";
+      if(type==='scooter') document.getElementById('btnVehScooter').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-50 border border-red-300 text-red-700 flex flex-col items-center gap-1 text-xs font-bold";
+      if(type==='bike') document.getElementById('btnVehBike').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-50 border border-red-300 text-red-700 flex flex-col items-center gap-1 text-xs font-bold";
       updateEarnings();
     }
 
@@ -709,8 +717,8 @@
     // Courier Application Form Helpers
     function selectPfa(val) {
       document.getElementById('hasPfaInput').value = val;
-      document.getElementById('pfaYes').className = val==='da' ? "border-2 border-red-500 bg-red-500/10 rounded-xl p-2.5 text-center font-bold text-xs text-white" : "border border-gray-800 bg-gray-950 rounded-xl p-2.5 text-center font-bold text-xs text-white";
-      document.getElementById('pfaNo').className = val==='nu' ? "border-2 border-red-500 bg-red-500/10 rounded-xl p-2.5 text-center font-bold text-xs text-white" : "border border-gray-800 bg-gray-950 rounded-xl p-2.5 text-center font-bold text-xs text-white";
+      document.getElementById('pfaYes').className = val==='da' ? "border-2 border-red-600 bg-red-50 rounded-xl p-2.5 text-center font-bold text-xs text-red-700" : "border border-slate-300 bg-slate-50 rounded-xl p-2.5 text-center font-bold text-xs text-slate-700";
+      document.getElementById('pfaNo').className = val==='nu' ? "border-2 border-red-600 bg-red-50 rounded-xl p-2.5 text-center font-bold text-xs text-red-700" : "border border-slate-300 bg-slate-50 rounded-xl p-2.5 text-center font-bold text-xs text-slate-700";
       document.getElementById('pfaYesFields').classList.toggle('hidden', val !== 'da');
       document.getElementById('pfaNoBanner').style.display = val==='nu' ? 'flex' : 'none';
     }
@@ -719,28 +727,29 @@
       document.getElementById('selectedVehicle').value = veh;
       ['Car', 'Motorcycle', 'Bicycle', 'EBike'].forEach(v => {
         const id = v==='Car'?'vCar':v==='Motorcycle'?'vMoto':v==='Bicycle'?'vBike':'vEBike';
-        document.getElementById(id).className = v===veh ? "border-2 border-red-500 bg-red-500/10 p-2.5 rounded-xl text-xs font-bold text-center text-white" : "border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-xs font-bold text-center text-gray-300";
+        document.getElementById(id).className = v===veh ? "border-2 border-red-600 bg-red-50 p-2.5 rounded-xl text-xs font-bold text-center text-red-700" : "border border-slate-300 bg-slate-50 p-2.5 rounded-xl text-xs font-bold text-center text-slate-700";
       });
     }
 
     function selectNeedRental(val) {
       document.getElementById('needRentalInput').value = val;
-      document.getElementById('rentYes').className = val==='da' ? "border-2 border-red-500 bg-red-500/10 p-2 rounded-lg text-xs font-bold text-white" : "border border-gray-800 p-2 rounded-lg text-xs font-bold text-white";
-      document.getElementById('rentNo').className = val==='nu' ? "border-2 border-red-500 bg-red-500/10 p-2 rounded-lg text-xs font-bold text-white" : "border border-gray-800 p-2 rounded-lg text-xs font-bold text-white";
+      document.getElementById('rentYes').className = val==='da' ? "border-2 border-red-600 bg-red-50 p-2 rounded-lg text-xs font-bold text-red-700" : "border border-slate-300 p-2 rounded-lg text-xs font-bold text-slate-700 bg-white";
+      document.getElementById('rentNo').className = val==='nu' ? "border-2 border-red-600 bg-red-50 p-2 rounded-lg text-xs font-bold text-red-700" : "border border-slate-300 p-2 rounded-lg text-xs font-bold text-slate-700 bg-white";
       document.getElementById('rentalChoice').style.display = val==='da' ? 'block' : 'none';
     }
 
-    // Firebase Form Submissions
+    // Form Submissions (Firebase + Email to buraqsrl@gmail.com)
     async function submitApplication(e) {
       e.preventDefault();
-      const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.innerHTML = 'Se trimite...';
+      const btn = document.getElementById('submitBtn'); 
+      btn.disabled = true; 
+      btn.innerHTML = 'Se trimite...';
       
       try {
         const formData = new FormData(e.target);
         const dataObj = {};
         formData.forEach((value, key) => { dataObj[key] = value; });
         
-        // Include checked platforms explicitly
         dataObj.platforms = [];
         if(e.target.glovo.checked) dataObj.platforms.push('Glovo');
         if(e.target.bolt.checked) dataObj.platforms.push('Bolt');
@@ -748,20 +757,42 @@
 
         dataObj.submittedAt = new Date();
 
+        // 1. Save to Firebase Firestore
         await window.addDoc(window.collection(window.db, "courier_applications"), dataObj);
+
+        // 2. Send Email via EmailJS to buraqsrl@gmail.com
+        // Make sure to create a template in EmailJS dashboard with parameters: to_email, name, phone, email, city, cnp, etc.
+        const emailParams = {
+          to_email: "buraqsrl@gmail.com",
+          name: dataObj.name,
+          phone: dataObj.phone,
+          email: dataObj.email,
+          city: dataObj.city,
+          cnp: dataObj.cnp,
+          has_pfa: dataObj.has_pfa,
+          selected_vehicle: dataObj.selected_vehicle,
+          platforms: dataObj.platforms.join(', '),
+          iban: dataObj.iban
+        };
+
+        // Replace YOUR_SERVICE_ID and YOUR_TEMPLATE_ID with your EmailJS credentials
+        await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailParams);
 
         document.getElementById('applyForm').classList.add('hidden');
         document.getElementById('applySuccessBox').classList.remove('hidden');
       } catch (err) {
         console.error(err);
-        alert('Eroare: ' + err.message);
-        btn.disabled = false; btn.innerHTML = 'TRIMITE CEREREA ÎN BURAQ FLEET';
+        alert('Eroare la trimitere: ' + err.message);
+        btn.disabled = false; 
+        btn.innerHTML = 'TRIMITE CEREREA ÎN BURAQ FLEET';
       }
     }
 
     async function handleRentalSubmit(e) {
       e.preventDefault();
-      const btn = document.getElementById('submitRentalBtn'); btn.disabled = true; btn.innerHTML = 'Se trimite...';
+      const btn = document.getElementById('submitRentalBtn'); 
+      btn.disabled = true; 
+      btn.innerHTML = 'Se trimite...';
 
       try {
         const form = e.target;
@@ -792,7 +823,8 @@
       } catch (err) {
         console.error(err);
         alert('Eroare: ' + err.message);
-        btn.disabled = false; btn.innerHTML = 'TRIMITE CEREREA DE ÎNCHIRIERE';
+        btn.disabled = false; 
+        btn.innerHTML = 'TRIMITE CEREREA DE ÎNCHIRIERE';
       }
     }
   </script>
