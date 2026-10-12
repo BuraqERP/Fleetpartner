@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BURAQ Delivery & Rentals - Partener Glovo, Bolt Food & Wolt</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Firebase SDKs (Modular CDN) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+    // Your Active Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBoOBoJU3KwebaTQOf-mOc6bxUOt3KyEgU",
+      authDomain: "partner-6e0a9.firebaseapp.com",
+      projectId: "partner-6e0a9",
+      storageBucket: "partner-6e0a9.firebasestorage.app",
+      messagingSenderId: "1093800021119",
+      appId: "1:1093800021119:web:6d3945abaf8116a958c34a",
+      measurementId: "G-W5E0B7YX06"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    // Make them globally available for form submit functions
+    window.db = db;
+    window.storage = storage;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.ref = ref;
+    window.uploadBytes = uploadBytes;
+    window.getDownloadURL = getDownloadURL;
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f19;
+      color: #f3f4f6;
+    }
+    .modal-backdrop {
+      background: rgba(5, 7, 12, 0.85);
+      backdrop-filter: blur(8px);
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #E51B24; }
+  </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
+
+  <!-- ================= HEADER & NAVIGATION ================= -->
+  <header class="sticky top-0 z-40 bg-[#0b0f19]/95 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      
+      <!-- Logo -->
+      <a href="#top" class="flex items-center gap-2.5 sm:gap-3">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10 text-[#E51B24] shrink-0" viewBox="0 0 500 500" fill="currentColor">
+          <circle cx="250" cy="250" r="230" fill="#E51B24" />
+          <path d="M 120 180 Q 230 150 320 250 Q 200 210 130 250 Z" fill="#ffffff" />
+          <path d="M 100 230 Q 210 200 300 290 Q 180 260 110 295 Z" fill="#ffffff" />
+          <path d="M 80 280 Q 190 250 280 330 Q 160 300 90 335 Z" fill="#ffffff" />
+        </svg>
+        <div class="flex flex-col">
+          <span class="text-xl sm:text-2xl font-black italic tracking-wider text-white leading-none">BURAQ</span>
+          <span class="text-[9px] sm:text-[10px] font-bold tracking-widest text-gray-400 uppercase leading-tight mt-0.5">Delivery & Rentals</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-semibold">
+        <a href="#pfa" class="text-gray-300 hover:text-white transition flex items-center gap-1.5">
+          <span class="bg-red-500/10 text-red-400 text-[10px] px-2 py-0.5 rounded border border-red-500/20 font-bold">SOLO</span>
+          <span data-i18n="nav_pfa">Colaborare PFA</span>
+        </a>
+        <a href="#rentals" class="text-gray-300 hover:text-white transition" data-i18n="nav_rentals">Închirieri Flotă</a>
+        <a href="#calculator" class="text-gray-300 hover:text-white transition" data-i18n="nav_calc">Calculează Câștig</a>
+        <a href="#faq" class="text-gray-300 hover:text-white transition" data-i18n="nav_faq">Întrebări Frecvente</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button id="langToggle" onclick="toggleLanguage()" class="flex items-center gap-1.5 bg-gray-800 hover:bg-gray-700 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold transition border border-gray-700">
+          <span id="langFlag">🇷🇴</span>
+          <span id="langText">RO</span>
+        </button>
+
+        <button onclick="openCourierModal()" class="bg-[#E51B24] hover:bg-red-700 text-white font-bold px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm transition shadow-lg shadow-red-600/30 flex items-center gap-1.5 sm:gap-2">
+          <span data-i18n="btn_apply_now">Aplică Curier</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ================= HERO SECTION ================= -->
+  <section id="top" class="relative py-10 sm:py-16 lg:py-20 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <div class="lg:col-span-7 space-y-4 sm:space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span data-i18n="hero_badge">Partener Oficial Flotă România</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+            <span data-i18n="hero_title_1">Livrează cu BURAQ.</span><br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400" data-i18n="hero_title_2">Câștigă mai mult în fiecare săptămână.</span>
+          </h1>
+
+          <p class="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed" data-i18n="hero_desc">
+            Alătură-te flotei partener oficial Glovo, Bolt Food și Wolt. Oferim plăți săptămânale la timp, comisioane corecte, suport 24/7 și vehicule de închiriat pentru curieri.
+          </p>
+
+          <div class="pt-2 sm:pt-4 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+            <button onclick="openCourierModal()" class="w-full sm:w-auto bg-[#E51B24] hover:bg-red-700 text-white font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl text-sm sm:text-base transition shadow-xl shadow-red-600/30 flex items-center justify-center gap-2.5">
+              <span data-i18n="hero_cta">Completează Formularul de Înscriere</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </button>
+
+            <a href="https://wa.me/40773420491" target="_blank" class="w-full sm:w-auto bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-400 font-bold px-6 py-3.5 rounded-xl text-sm sm:text-base transition flex items-center justify-center gap-2.5">
+              <i data-lucide="message-square" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+              <span data-i18n="hero_whatsapp">Contact pe WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Earnings Calculator -->
+        <div class="lg:col-span-5 pt-4 lg:pt-0" id="calculator">
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-5 sm:space-y-6 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3 sm:pb-4">
+              <h3 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                <i data-lucide="calculator" class="text-red-500 w-5 h-5"></i>
+                <span data-i18n="calc_title">Estimator Câștiguri</span>
+              </h3>
+              <span class="bg-emerald-500/10 text-emerald-400 text-[10px] sm:text-xs px-2.5 py-1 rounded-full font-semibold">RON / Săptămână</span>
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-xs font-semibold text-gray-400" data-i18n="calc_veh_label">Selectează Vehiculul:</label>
+              <div class="grid grid-cols-3 gap-2">
+                <button onclick="setCalcVehicle('car', 45)" id="btnVehCar" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-600/20 border border-red-500 text-white flex flex-col items-center gap-1 text-xs font-bold">
+                  <i data-lucide="car" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                  <span data-i18n="veh_car">Mașină</span>
+                </button>
+                <button onclick="setCalcVehicle('scooter', 38)" id="btnVehScooter" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 flex flex-col items-center gap-1 text-xs font-bold">
+                  <i data-lucide="bike" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                  <span data-i18n="veh_scooter">Scuter</span>
+                </button>
+                <button onclick="setCalcVehicle('bike', 30)" id="btnVehBike" class="calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 flex flex-col items-center gap-1 text-xs font-bold">
+                  <i data-lucide="footprints" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                  <span data-i18n="veh_bike">Bicicletă</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-2.5">
+              <div class="flex justify-between text-xs sm:text-sm">
+                <span class="text-gray-400" data-i18n="calc_hours_label">Ore lucrate pe săptămână:</span>
+                <span class="font-bold text-white"><span id="hoursVal">40</span> ore</span>
+              </div>
+              <input type="range" id="hoursSlider" min="10" max="70" value="40" oninput="updateEarnings()" class="w-full accent-red-600 bg-gray-800 rounded-lg cursor-pointer h-2">
+            </div>
+
+            <div class="bg-gray-950 p-3.5 sm:p-4 rounded-2xl border border-gray-800 space-y-2">
+              <div class="flex justify-between items-baseline">
+                <span class="text-xs text-gray-400" data-i18n="calc_weekly">Estimat Net Săptămânal:</span>
+                <span class="text-xl sm:text-2xl font-black text-emerald-400" id="weeklyVal">1.800 RON</span>
+              </div>
+              <div class="flex justify-between items-baseline border-t border-gray-800 pt-2">
+                <span class="text-xs text-gray-400" data-i18n="calc_monthly">Estimat Lunar (4 Săpt.):</span>
+                <span class="text-lg sm:text-xl font-bold text-white" id="monthlyVal">7.200 RON</span>
+              </div>
+            </div>
+
+            <button onclick="openCourierModal()" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-bold py-3 sm:py-3.5 rounded-xl transition text-xs sm:text-sm flex items-center justify-center gap-2">
+              <span data-i18n="calc_cta">Vreau Să Încep Acum</span>
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= PFA SECTION ================= -->
+  <section id="pfa" class="py-12 sm:py-16 bg-gray-900/50 border-y border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-r from-emerald-950/40 via-gray-900 to-gray-900 border border-emerald-500/30 rounded-2xl sm:rounded-3xl p-6 sm:p-10">
+        <div class="grid lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+          <div class="lg:col-span-8 space-y-3 sm:space-y-4">
+            <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span data-i18n="pfa_badge">Colaborare PFA - Taxe Minimale</span>
+            </div>
+            
+            <h2 class="text-xl sm:text-3xl font-extrabold text-white leading-snug" data-i18n="pfa_title">
+              Nu ai un PFA? Îți poți deschide unul simplu prin partenerul nostru SOLO.
+            </h2>
+            
+            <p class="text-gray-300 text-xs sm:text-base leading-relaxed" data-i18n="pfa_desc">
+              Păstrezi un procent mai mare din veniturile tale din livrare lucrând pe PFA. SOLO se ocupă de întreaga ta contabilitate și înființare 100% online.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <a href="https://pfa.solo.ro/register/vreau-pfa" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-gray-950 font-bold px-5 py-3 rounded-xl transition text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                <span data-i18n="pfa_btn">Deschide PFA pe SOLO.ro</span>
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+
+              <button onclick="openCourierModal()" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-5 py-3 rounded-xl transition text-xs sm:text-sm border border-gray-700">
+                <span data-i18n="pfa_btn_already">Am Deja PFA / Vreau SRL</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 bg-gray-950/80 p-5 rounded-2xl border border-gray-800 space-y-3">
+            <h4 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+              <i data-lucide="sparkles" class="text-emerald-400 w-4 h-4"></i>
+              <span data-i18n="pfa_benefits_title">Avantaje Colaborare PFA:</span>
+            </h4>
+            <ul class="text-xs text-gray-300 space-y-2">
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i><span data-i18n="pfa_b1">Taxe reduse și deductibilitate combustibil / vehicul.</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i><span data-i18n="pfa_b2">Contabilitate automatizată și facturare facilă.</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i><span data-i18n="pfa_b3">Plăți directe săptămânale în contul tău bancar.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= FLEET RENTALS SECTION ================= -->
+  <section id="rentals" class="py-12 sm:py-16 bg-slate-100 text-slate-900 border-b border-slate-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      <div class="text-center space-y-3">
+        <!-- Location Notice Banner -->
+        <div class="inline-flex items-center gap-2 bg-emerald-100 border border-emerald-300 text-emerald-800 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-sm">
+          <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
+          <span data-i18n="location_notice">Serviciul de închirieri este disponibil în prezent exclusiv în <strong>Iași</strong>.</span>
+        </div>
+
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900" data-i18n="hero_title">
+          Închiriază un Vehicul din Flota BURAQ
+        </h2>
+        <p class="text-slate-600 text-xs sm:text-base max-w-2xl mx-auto" data-i18n="hero_subtitle">
+          Alege dintre mașini electrice, scutere agile și e-bike-uri concepute special pentru livrări Glovo, Bolt Food și Wolt. Cu mentenanță și asigurare incluse.
+        </p>
+      </div>
+
+      <!-- Vehicle Cards Grid -->
+      <div class="grid md:grid-cols-3 gap-6 sm:gap-8 pt-4">
+        
+        <!-- CARD 1: DACIA SPRING -->
+        <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
+          <div class="space-y-3.5">
+            <div class="bg-slate-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
+              <span class="absolute top-3 right-3 bg-red-100 border border-red-200 text-red-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">100% Electric</span>
+              <i data-lucide="car" class="w-16 h-16 sm:w-20 sm:h-20 text-red-600 mx-auto"></i>
+            </div>
+
+            <div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900">Dacia Spring EV</h3>
+              <p class="text-xs text-slate-500" data-i18n="car_sub">Ideală pentru livrări auto confortabile în orice anotimp</p>
+            </div>
+
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_range">Autonomie:</span> <span class="font-bold text-slate-900">220 km</span></div>
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_charge">Timp Încărcare:</span> <span class="font-bold text-slate-900">Rapid DC / AC Home</span></div>
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesat:</span> <span class="font-bold text-slate-900">Cat. B</span></div>
+              <div class="flex justify-between border-t border-slate-200 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
+            </div>
+
+            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-100 pt-3">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-red-600 shrink-0"></i> <span data-i18n="car_f1">RCA + CASCO cu acoperire completă incluse</span></li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-red-600 shrink-0"></i> <span data-i18n="car_f2">Mentenanță, revizii și schimb anvelope de sezon</span></li>
+            </ul>
+          </div>
+
+          <button onclick="openRentalModal('Dacia Spring EV')" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-bold py-3 rounded-xl transition text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-red-600/20">
+            <span data-i18n="btn_rent_now">Solicită Închiriere Auto</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- CARD 2: SCOOTER -->
+        <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
+          <div class="space-y-3.5">
+            <div class="bg-slate-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
+              <span class="absolute top-3 right-3 bg-orange-100 border border-orange-200 text-orange-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Agil & Rapid</span>
+              <i data-lucide="bike" class="w-16 h-16 sm:w-20 sm:h-20 text-orange-500 mx-auto"></i>
+            </div>
+
+            <div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900">Scuter 125cc / Electric</h3>
+              <p class="text-xs text-slate-500" data-i18n="scooter_sub">Navigație rapidă prin traficul aglomerat din oraș</p>
+            </div>
+
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_consump">Consum Mediu:</span> <span class="font-bold text-slate-900">2.2 L / 100km</span></div>
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_storage">Echipare:</span> <span class="font-bold text-slate-900">Cutie Termoizolantă Inclusă</span></div>
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesat:</span> <span class="font-bold text-slate-900">Cat. A1 / A / B</span></div>
+              <div class="flex justify-between border-t border-slate-200 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
+            </div>
+
+            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-100 pt-3">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-orange-500 shrink-0"></i> <span data-i18n="scooter_f1">Ideal pentru parcări rapide în centrul orașului</span></li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-orange-500 shrink-0"></i> <span data-i18n="scooter_f2">Asistență tehnică și schimburi de ulei incluse</span></li>
+            </ul>
+          </div>
+
+          <button onclick="openRentalModal('Scuter 125cc / Electric')" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-bold py-3 rounded-xl transition text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-red-600/20">
+            <span data-i18n="btn_rent_now">Solicită Închiriere Scuter</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- CARD 3: E-BIKE -->
+        <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
+          <div class="space-y-3.5">
+            <div class="bg-slate-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center border border-slate-200 relative">
+              <span class="absolute top-3 right-3 bg-emerald-100 border border-emerald-200 text-emerald-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Fără Permis</span>
+              <i data-lucide="zap" class="w-16 h-16 sm:w-20 sm:h-20 text-emerald-600 mx-auto"></i>
+            </div>
+
+            <div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900">E-Bike Pro Delivery</h3>
+              <p class="text-xs text-slate-500" data-i18n="ebike_sub">Livrări fără costuri de combustibil sau permis</p>
+            </div>
+
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_autonomy">Autonomie Baterie:</span> <span class="font-bold text-slate-900">80 km / încărcare</span></div>
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_battery">Baterie:</span> <span class="font-bold text-slate-900">Detașabilă</span></div>
+              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesat:</span> <span class="font-bold text-emerald-700">NU e nevoie de permis</span></div>
+              <div class="flex justify-between border-t border-slate-200 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Disponibilitate:</span> <span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Iași</span></div>
+            </div>
+
+            <ul class="text-xs text-slate-600 space-y-1.5 border-t border-slate-100 pt-3">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> <span data-i18n="ebike_f1">Costuri zero de carburant</span></li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> <span data-i18n="ebike_f2">Acces facil în zone pietonale</span></li>
+            </ul>
+          </div>
+
+          <button onclick="openRentalModal('E-Bike Pro Delivery')" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-bold py-3 rounded-xl transition text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-red-600/20">
+            <span data-i18n="btn_rent_now">Solicită Închiriere E-Bike</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= FAQ SECTION ================= -->
+  <section id="faq" class="py-12 sm:py-16 bg-gray-900/40 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+      <div class="text-center space-y-2 sm:space-y-3">
+        <h2 class="text-2xl sm:text-3xl font-bold text-white" data-i18n="faq_title">Întrebări Frecvente</h2>
+      </div>
+      <div class="space-y-3 sm:space-y-4">
+        <details class="bg-gray-900 border border-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-5 group">
+          <summary class="font-bold text-white cursor-pointer flex justify-between items-center text-xs sm:text-base">
+            <span data-i18n="faq_q1">Cât de repede pot începe să lucrez?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-open:rotate-180 transition"></i>
+          </summary>
+          <p class="text-xs sm:text-sm text-gray-400 mt-2.5 border-t border-gray-800 pt-2.5" data-i18n="faq_a1">Procesul de activare durează între 24 și 48 de ore de la trimiterea documentelor.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-gray-950 border-t border-gray-800 py-8 sm:py-12 text-xs text-gray-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+      <div class="flex items-center gap-2.5">
+        <svg class="w-7 h-7 text-[#E51B24]" viewBox="0 0 500 500" fill="currentColor">
+          <circle cx="250" cy="250" r="230" fill="#E51B24" />
+          <path d="M 120 180 Q 230 150 320 250 Q 200 210 130 250 Z" fill="#ffffff" />
+        </svg>
+        <span class="text-base sm:text-lg font-black text-white italic">BURAQ DELIVERY & RENTALS</span>
+      </div>
+      <p class="text-center sm:text-right">© 2026 BURAQ DELIVERY & RENTALS. Prețuri transparente și mentenanță inclusă.</p>
+    </div>
+  </footer>
+
+
+  <!-- ================= WHATSAPP FLOATING BUTTON ================= -->
+  <a href="https://wa.me/40773420491?text=Salut!%20Am%20o%20%C3%AEntrebare%20legat%C4%83%20de%20flota%20BURAQ." target="_blank" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 sm:p-4 rounded-full shadow-2xl transition flex items-center justify-center">
+    <i data-lucide="message-circle" class="w-6 h-6 sm:w-7 sm:h-7"></i>
+  </a>
+
+
+  <!-- ================= MODAL 1: COURIER APPLICATION ================= -->
+  <div id="courierModal" class="fixed inset-0 z-50 hidden modal-backdrop overflow-y-auto p-3 sm:p-6 flex items-center justify-center">
+    <div class="bg-gray-900 border border-gray-800 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden relative my-auto">
+      
+      <!-- Modal Header -->
+      <div class="bg-gray-950 p-4 sm:p-6 border-b border-gray-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <svg class="w-7 h-7 sm:w-8 sm:h-8 text-[#E51B24] shrink-0" viewBox="0 0 500 500" fill="currentColor">
+            <circle cx="250" cy="250" r="230" fill="#E51B24" />
+            <path d="M 120 180 Q 230 150 320 250 Q 200 210 130 250 Z" fill="#ffffff" />
+          </svg>
+          <div>
+            <h3 class="text-sm sm:text-lg font-extrabold text-white leading-tight" data-i18n="app_title">Formular Înscriere Curier BURAQ</h3>
+            <p class="text-[10px] sm:text-xs text-gray-400" data-i18n="app_subtitle">Partener Glovo • Bolt Food • Wolt</p>
+          </div>
+        </div>
+
+        <button onclick="closeCourierModal()" class="text-gray-400 hover:text-white p-1.5 rounded-lg bg-gray-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Application Form -->
+      <form id="applyForm" onsubmit="submitApplication(event)" class="p-4 sm:p-8 space-y-5">
+        <!-- 1. Personal Info -->
+        <div class="space-y-3">
+          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_1">1. Informații Personale</h4>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_name">Nume Complet *</label>
+              <input type="text" name="name" required placeholder="ex: Ion Popescu" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_phone">Telefon *</label>
+              <input type="tel" name="phone" required placeholder="722000000" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_email">Email *</label>
+              <input type="email" name="email" required placeholder="nume@example.com" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_cnp">CNP *</label>
+              <input type="text" name="cnp" maxlength="13" required placeholder="1990101XXXXXX" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_city">Oraș *</label>
+            <select name="city" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500">
+              <option value="Iasi">Iași</option>
+              <option value="Bucuresti">București</option>
+              <option value="Cluj-Napoca">Cluj-Napoca</option>
+              <option value="Timisoara">Timișoara</option>
+              <option value="Brasov">Brașov</option>
+              <option value="Constanta">Constanța</option>
+              <option value="Alt Oras">Alt Oraș</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 2. PFA -->
+        <div class="space-y-3">
+          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_2">2. Forma de Colaborare (PFA)</h4>
+          <input type="hidden" name="has_pfa" id="hasPfaInput" value="nu">
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" onclick="selectPfa('da')" id="pfaYes" class="border border-gray-800 bg-gray-950 rounded-xl p-2.5 text-center font-bold text-xs text-white" data-i18n="btn_pfa_yes">DA (Am PFA)</button>
+            <button type="button" onclick="selectPfa('nu')" id="pfaNo" class="border-2 border-red-500 bg-red-500/10 rounded-xl p-2.5 text-center font-bold text-xs text-white" data-i18n="btn_pfa_no">NU (Vreau prin SOLO)</button>
+          </div>
+          
+          <div id="pfaYesFields" class="hidden grid sm:grid-cols-2 gap-3 bg-gray-950 p-3.5 rounded-xl border border-gray-800">
+            <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_cui">CUI PFA *</label><input type="text" name="cui_pfa" placeholder="RO12345678" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-sm text-white outline-none"></div>
+            <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_pfa_name">Nume PFA *</label><input type="text" name="pfa_name" placeholder="Popescu Ion PFA" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-sm text-white outline-none"></div>
+          </div>
+
+          <div id="pfaNoBanner" class="bg-emerald-950/30 border border-emerald-500/30 p-3 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <span class="text-xs text-emerald-400 font-bold" data-i18n="solo_text">💡 Deschide PFA online rapid prin SOLO.ro:</span>
+            <a href="https://pfa.solo.ro/register/vreau-pfa" target="_blank" class="bg-emerald-500 text-gray-950 text-xs font-bold px-3 py-1.5 rounded-lg w-full sm:w-auto text-center">SOLO.ro</a>
+          </div>
+        </div>
+
+        <!-- 3. Vehicle & Fleet Rental Choice -->
+        <div class="space-y-3">
+          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_3">3. Vehicul & Închiriere Flotă</h4>
+          <input type="hidden" name="selected_vehicle" id="selectedVehicle" value="Car">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button type="button" onclick="selectVeh('Car')" id="vCar" class="border-2 border-red-500 bg-red-500/10 p-2.5 rounded-xl text-xs font-bold text-center text-white" data-i18n="veh_car">Mașină</button>
+            <button type="button" onclick="selectVeh('Motorcycle')" id="vMoto" class="border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-xs font-bold text-center text-gray-300" data-i18n="veh_scooter">Scuter</button>
+            <button type="button" onclick="selectVeh('Bicycle')" id="vBike" class="border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-xs font-bold text-center text-gray-300" data-i18n="veh_bike">Bicicletă</button>
+            <button type="button" onclick="selectVeh('EBike')" id="vEBike" class="border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-xs font-bold text-center text-gray-300">E-Bike</button>
+          </div>
+          
+          <div class="bg-gray-950 p-3.5 rounded-xl border border-gray-800 space-y-2">
+            <label class="block text-xs font-bold text-white" data-i18n="lbl_rental_q">Ai nevoie să închiriezi un vehicul de la BURAQ?</label>
+            <input type="hidden" name="need_fleet_rental" id="needRentalInput" value="nu">
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="selectNeedRental('da')" id="rentYes" class="border border-gray-800 p-2 rounded-lg text-xs font-bold text-white" data-i18n="pfa_yes">DA</button>
+              <button type="button" onclick="selectNeedRental('nu')" id="rentNo" class="border-2 border-red-500 bg-red-500/10 p-2 rounded-lg text-xs font-bold text-white" data-i18n="pfa_no">NU</button>
+            </div>
+            <div id="rentalChoice" class="hidden pt-2">
+              <select name="requested_rental_model" class="w-full bg-gray-900 border border-gray-800 rounded-lg p-2 text-xs text-white">
+                <option value="Dacia Spring EV">Dacia Spring EV (Auto - Iași)</option>
+                <option value="Scuter 125cc">Scuter 125cc (Iași)</option>
+                <option value="E-Bike Pro">E-Bike Pro (Iași)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Bank Details -->
+        <div class="space-y-3">
+          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_4">4. Detalii Bancare (Pentru Plată)</h4>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_bank_holder">Titular Cont *</label><input type="text" name="bank_holder" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500"></div>
+            <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_bank_name">Bancă *</label><input type="text" name="bank_name" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-red-500"></div>
+          </div>
+          <div><label class="block text-xs font-semibold text-gray-300 mb-1" data-i18n="lbl_iban">IBAN (România) *</label><input type="text" name="iban" required placeholder="RO98 BTRL 0000 0000 0000 0000" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none font-mono focus:border-red-500"></div>
+        </div>
+
+        <!-- 5. Delivery Platforms (Unchecked by default) -->
+        <div class="space-y-2">
+          <h4 class="text-xs sm:text-sm font-bold text-red-500 uppercase tracking-wider border-b border-gray-800 pb-1" data-i18n="sec_5">5. Platforme Dorite</h4>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="p-2.5 bg-gray-950 border border-gray-800 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-white"><input type="checkbox" name="glovo" value="Glovo" class="accent-yellow-500"> Glovo</label>
+            <label class="p-2.5 bg-gray-950 border border-gray-800 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-white"><input type="checkbox" name="bolt" value="Bolt" class="accent-emerald-500"> Bolt</label>
+            <label class="p-2.5 bg-gray-950 border border-gray-800 rounded-xl flex items-center justify-center sm:justify-start gap-1.5 cursor-pointer text-xs font-bold text-white"><input type="checkbox" name="wolt" value="Wolt" class="accent-cyan-500"> Wolt</label>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-extrabold py-3.5 rounded-xl transition shadow-xl text-xs sm:text-sm" data-i18n="btn_submit">TRIMITE CEREREA ÎN BURAQ FLEET</button>
+      </form>
+
+      <!-- Courier Application Success State -->
+      <div id="applySuccessBox" class="hidden p-8 text-center space-y-4">
+        <i data-lucide="check-circle-2" class="w-12 h-12 text-emerald-400 mx-auto"></i>
+        <h3 class="text-xl font-bold text-white" data-i18n="success_title">Aplicația a fost trimisă cu succes!</h3>
+        <p class="text-xs text-gray-400" data-i18n="success_desc">Echipa BURAQ vă va contacta în cel mai scurt timp.</p>
+        <button onclick="closeCourierModal()" class="bg-gray-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold">Închide</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL 2: VEHICLE RENTAL REQUEST ================= -->
+  <div id="rentalModal" class="fixed inset-0 z-50 hidden modal-backdrop overflow-y-auto p-3 sm:p-6 flex items-center justify-center">
+    <div class="bg-white border border-slate-200 w-full max-w-lg rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden relative my-auto text-slate-900">
+      
+      <!-- Modal Header -->
+      <div class="bg-slate-50 p-4 sm:p-6 border-b border-slate-200 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-red-100 rounded-xl text-red-600">
+            <i data-lucide="key" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900 leading-tight" data-i18n="modal_title">Formular Închiriere Vehicul</h3>
+            <p class="text-xs text-red-600 font-bold" id="selectedVehicleLabel">Dacia Spring EV</p>
+          </div>
+        </div>
+
+        <button onclick="closeRentalModal()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Form Body -->
+      <form id="rentalForm" onsubmit="handleRentalSubmit(event)" class="p-4 sm:p-6 space-y-3.5 sm:space-y-4">
+        <input type="hidden" name="requested_vehicle_model" id="vehicleModelInput" value="">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_client_name">Nume Complet *</label>
+          <input type="text" name="client_name" required placeholder="ex: Ion Popescu" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_client_phone">Număr de Telefon *</label>
+          <div class="flex">
+            <span class="bg-slate-100 border border-r-0 border-slate-300 rounded-l-xl px-3 flex items-center text-xs text-slate-700 font-bold">🇷🇴 +40</span>
+            <input type="tel" name="client_phone" required placeholder="722 000 000" class="w-full bg-slate-50 border border-slate-300 rounded-r-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-500 outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_rental_city">Oraș de Preluare *</label>
+          <select name="rental_city" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 focus:border-red-500 outline-none font-bold">
+            <option value="Iasi (Activ)" selected>Iași (Disponibil Acum)</option>
+            <option value="Bucuresti (Lista Asteptare)">București (Listă de așteptare)</option>
+            <option value="Cluj-Napoca (Lista Asteptare)">Cluj-Napoca (Listă de așteptare)</option>
+            <option value="Timisoara (Lista Asteptare)">Timișoara (Listă de așteptare)</option>
+          </select>
+          <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1" data-i18n="city_note">* Închirierile sunt disponibile momentan doar în Iași. Pentru alte orașe vă trecem pe lista de așteptare.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_rental_duration">Perioada Dorită de Închiriere *</label>
+          <select name="rental_duration" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 focus:border-red-500 outline-none">
+            <option value="1 Saptamana" data-i18n="dur_1w">1 Săptămână</option>
+            <option value="2 Saptamani" data-i18n="dur_2w">2 Săptămâni</option>
+            <option value="1 Luna+" data-i18n="dur_1m">1 Lună sau mai mult</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_license_upload">Încarcă Permis de Conducere / CI *</label>
+          <input type="file" name="license_document" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2.5 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600 hover:file:bg-red-100">
+        </div>
+
+        <button type="submit" id="submitRentalBtn" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-extrabold py-3.5 rounded-xl transition text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-600/20 mt-2">
+          <span data-i18n="btn_submit_rental">TRIMITE CEREREA DE ÎNCHIRIERE</span>
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+
+      <!-- Rental Success State -->
+      <div id="rentalSuccessState" class="hidden p-6 sm:p-8 text-center space-y-3.5">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto border border-emerald-300">
+          <i data-lucide="check-circle-2" class="w-7 h-7 sm:w-8 sm:h-8"></i>
+        </div>
+        <h3 class="text-lg sm:text-xl font-bold text-slate-900" data-i18n="success_title">Cerere Trimisă cu Succes!</h3>
+        <p class="text-xs text-slate-600 max-w-xs mx-auto leading-relaxed" data-i18n="success_desc">
+          Echipa BURAQ Rentals din Iași va analiza datele și te va contacta în cel mai scurt timp pentru predarea vehiculului.
+        </p>
+        <button onclick="closeRentalModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition">
+          Închide
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ================= JAVASCRIPT & FIREBASE LOGIC ================= -->
+  <script>
+    lucide.createIcons();
+
+    // Multilingual Translations Dictionary
+    const translations = {
+      ro: {
+        nav_pfa: "Colaborare PFA", nav_rentals: "Închirieri Flotă", nav_calc: "Calculează Câștig", nav_faq: "Întrebări Frecvente", btn_apply_now: "Aplică Curier", hero_badge: "Partener Oficial Flotă România", hero_title_1: "Livrează cu BURAQ.", hero_title_2: "Câștigă mai mult în fiecare săptămână.", hero_desc: "Alătură-te flotei partener oficial Glovo, Bolt Food și Wolt. Oferim plăți săptămânale la timp, comisioane corecte, suport 24/7 și vehicule de închiriat.", hero_cta: "Completează Formularul de Înscriere", hero_whatsapp: "Contact pe WhatsApp", calc_title: "Estimator Câștiguri", calc_veh_label: "Selectează Vehiculul:", veh_car: "Mașină", veh_scooter: "Scuter", veh_bike: "Bicicletă", calc_hours_label: "Ore lucrate pe săptămână:", calc_weekly: "Estimat Net Săptămânal:", calc_monthly: "Estimat Lunar (4 Săpt.):", calc_cta: "Vreau Să Încep Acum", pfa_badge: "Colaborare PFA - Taxe Minimale", pfa_title: "Nu ai un PFA? Îți poți deschide unul simplu prin partenerul nostru SOLO.", pfa_desc: "Păstrezi un procent mai mare din veniturile tale din livrare lucrând pe PFA.", pfa_btn: "Deschide PFA pe SOLO.ro", pfa_btn_already: "Am Deja PFA / Vreau SRL", pfa_benefits_title: "Avantaje Colaborare PFA:", pfa_b1: "Taxe reduse și deductibilitate combustibil.", pfa_b2: "Contabilitate automatizată și facturare facilă.", pfa_b3: "Plăți directe săptămânale în contul tău.", location_notice: "Serviciul de închirieri este disponibil în prezent exclusiv în Iași.", hero_title: "Închiriază un Vehicul din Flota BURAQ", hero_subtitle: "Alege dintre mașini electrice, scutere agile și e-bike-uri concepute special pentru livrări Glovo, Bolt Food și Wolt. Cu mentenanță și asigurare incluse.", car_sub: "Ideală pentru livrări auto confortabile în orice anotimp", spec_range: "Autonomie:", spec_charge: "Timp Încărcare:", spec_license: "Permis Necesat:", spec_city: "Disponibilitate:", car_f1: "RCA + CASCO cu acoperire completă incluse", car_f2: "Mentenanță, revizii și schimb anvelope de sezon", scooter_sub: "Navigație rapidă prin traficul aglomerat din oraș", spec_consump: "Consum Mediu:", spec_storage: "Echipare:", scooter_f1: "Ideal pentru parcări rapide în centrul orașului", scooter_f2: "Asistență tehnică și schimburi de ulei incluse", ebike_sub: "Livrări fără costuri de combustibil sau permis", spec_autonomy: "Autonomie Baterie:", spec_battery: "Baterie:", ebike_f1: "Costuri zero de carburant", ebike_f2: "Acces facil în zone pietonale", btn_rent_now: "Solicită Închiriere", modal_title: "Formular Închiriere Vehicul", lbl_client_name: "Nume Complet *", lbl_client_phone: "Număr de Telefon *", lbl_rental_city: "Oraș de Preluare *", city_note: "* Închirierile sunt disponibile momentan doar în Iași. Pentru alte orașe vă trecem pe lista de așteptare.", lbl_rental_duration: "Perioada Dorită de Închiriere *", dur_1w: "1 Săptămână", dur_2w: "2 Săptămâni", dur_1m: "1 Lună sau mai mult", lbl_license_upload: "Încarcă Permis de Conducere / CI *", btn_submit_rental: "TRIMITE CEREREA DE ÎNCHIRIERE", success_title: "Cerere Trimisă cu Succes!", success_desc: "Echipa BURAQ Rentals din Iași va analiza datele și te va contacta în cel mai scurt timp pentru predarea vehiculului.", faq_title: "Întrebări Frecvente", faq_q1: "Cât de repede pot începe să lucrez?", faq_a1: "Procesul de activare durează între 24 și 48 de ore.", app_title: "Formular Înscriere Curier BURAQ", app_subtitle: "Partener Glovo • Bolt Food • Wolt", sec_1: "1. Informații Personale", lbl_name: "Nume Complet *", lbl_phone: "Telefon *", lbl_email: "Email *", lbl_cnp: "CNP *", lbl_city: "Oraș *", sec_2: "2. Forma de Colaborare (PFA)", btn_pfa_yes: "DA (Am PFA)", btn_pfa_no: "NU (Vreau prin SOLO)", lbl_cui: "CUI PFA *", lbl_pfa_name: "Nume PFA *", solo_text: "💡 Deschide PFA online rapid prin SOLO.ro:", sec_3: "3. Vehicul & Închiriere Flotă", lbl_rental_q: "Ai nevoie să închiriezi un vehicul de la BURAQ?", pfa_yes: "DA", pfa_no: "NU", sec_4: "4. Detalii Bancare (Pentru Plată)", lbl_bank_holder: "Titular Cont *", lbl_bank_name: "Bancă *", lbl_iban: "IBAN (România) *", sec_5: "5. Platforme Dorite", btn_submit: "TRIMITE CEREREA ÎN BURAQ FLEET"
+      },
+      en: {
+        nav_pfa: "PFA Collaboration", nav_rentals: "Fleet Rentals", nav_calc: "Calculate Earnings", nav_faq: "FAQ", btn_apply_now: "Apply Courier", hero_badge: "Official Fleet Partner Romania", hero_title_1: "Deliver with BURAQ.", hero_title_2: "Earn more every week.", hero_desc: "Join the official fleet partner for Glovo, Bolt Food, and Wolt. We offer weekly payouts on time, fair commission rates, 24/7 support, and vehicle rentals.", hero_cta: "Fill Out Application Form", hero_whatsapp: "WhatsApp Chat", calc_title: "Earnings Estimator", calc_veh_label: "Select Vehicle:", veh_car: "Car", veh_scooter: "Scooter", veh_bike: "Bicycle", calc_hours_label: "Weekly Working Hours:", calc_weekly: "Est. Weekly Net:", calc_monthly: "Est. Monthly (4 Wks):", calc_cta: "Start Delivering Now", pfa_badge: "PFA Collaboration - Lowest Taxes", pfa_title: "Don't have a PFA? Easily open one with our partner SOLO.", pfa_desc: "Keep a larger percentage of your delivery income by working under a PFA.", pfa_btn: "Open PFA on SOLO.ro", pfa_btn_already: "I Already Have PFA / Want SRL", pfa_benefits_title: "PFA Advantages:", pfa_b1: "Lower taxes & fuel deductibility.", pfa_b2: "Automated accounting and easy invoicing.", pfa_b3: "Direct weekly payouts to your bank account.", location_notice: "Rental service is currently available exclusively in Iași.", hero_title: "Rent a Vehicle from BURAQ Fleet", hero_subtitle: "Choose from electric cars, agile scooters, and e-bikes engineered specifically for Glovo, Bolt Food, and Wolt deliveries. Maintenance and insurance included.", car_sub: "Ideal for comfortable all-season automobile delivery", spec_range: "Range:", spec_charge: "Charging Time:", spec_license: "License Required:", spec_city: "Availability:", car_f1: "Full RCA + CASCO Insurance Included", car_f2: "Maintenance & Seasonal Tire Service Included", scooter_sub: "Swift navigation through heavy urban traffic", spec_consump: "Avg. Consumption:", spec_storage: "Equipment:", scooter_f1: "Perfect for quick downtown parking", scooter_f2: "Technical assistance & oil changes included", ebike_sub: "Deliveries without fuel costs or driving license", spec_autonomy: "Battery Range:", spec_battery: "Battery:", ebike_f1: "Zero fuel expenses", ebike_f2: "Easy access to pedestrian zones", btn_rent_now: "Request Rental", modal_title: "Vehicle Rental Form", lbl_client_name: "Full Name *", lbl_client_phone: "Phone Number *", lbl_rental_city: "Pickup City *", city_note: "* Rentals are currently active only in Iași. Choosing other cities places you on our priority waitlist.", lbl_rental_duration: "Desired Rental Period *", dur_1w: "1 Week", dur_2w: "2 Weeks", dur_1m: "1 Month or more", lbl_license_upload: "Upload Driving License / ID *", btn_submit_rental: "SUBMIT RENTAL REQUEST", success_title: "Request Submitted Successfully!", success_desc: "BURAQ Rentals team in Iași will review your application and contact you shortly for vehicle handover.", faq_title: "Frequently Asked Questions", faq_q1: "How fast can I start working?", faq_a1: "Activation usually takes 24 to 48 hours.", app_title: "BURAQ Courier Application Form", app_subtitle: "Partner Glovo • Bolt Food • Wolt", sec_1: "1. Personal Information", lbl_name: "Full Name *", lbl_phone: "Phone Number *", lbl_email: "Email *", lbl_cnp: "CNP (ID Number) *", lbl_city: "City *", sec_2: "2. Collaboration Type (PFA)", btn_pfa_yes: "YES (I have PFA)", btn_pfa_no: "NO (Help via SOLO)", lbl_cui: "PFA CUI *", lbl_pfa_name: "Registered PFA Name *", solo_text: "💡 Open a PFA online quickly with SOLO.ro:", sec_3: "3. Vehicle Selection & Fleet Rental", lbl_rental_q: "Do you need to rent a vehicle from BURAQ?", pfa_yes: "YES", pfa_no: "NO", sec_4: "4. Bank Details (For Payouts)", lbl_bank_holder: "Account Holder *", lbl_bank_name: "Bank Name *", lbl_iban: "IBAN (Romania) *", sec_5: "5. Preferred Delivery Platforms", btn_submit: "SUBMIT APPLICATION TO BURAQ FLEET"
+      }
+    };
+
+    let currentLang = 'ro';
+    function toggleLanguage() {
+      currentLang = currentLang === 'ro' ? 'en' : 'ro';
+      document.getElementById('langFlag').innerText = currentLang === 'ro' ? '🇷🇴' : '🇬🇧';
+      document.getElementById('langText').innerText = currentLang.toUpperCase();
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
+      });
+    }
+
+    // Calculator Logic
+    let currentCalcRate = 45;
+    function setCalcVehicle(type, rate) {
+      currentCalcRate = rate;
+      document.querySelectorAll('.calc-veh-btn').forEach(b => b.className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 flex flex-col items-center gap-1 text-xs font-bold");
+      if(type==='car') document.getElementById('btnVehCar').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-600/20 border border-red-500 text-white flex flex-col items-center gap-1 text-xs font-bold";
+      if(type==='scooter') document.getElementById('btnVehScooter').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-600/20 border border-red-500 text-white flex flex-col items-center gap-1 text-xs font-bold";
+      if(type==='bike') document.getElementById('btnVehBike').className = "calc-veh-btn p-2.5 sm:p-3 rounded-xl bg-red-600/20 border border-red-500 text-white flex flex-col items-center gap-1 text-xs font-bold";
+      updateEarnings();
+    }
+
+    function updateEarnings() {
+      const hours = parseInt(document.getElementById('hoursSlider').value);
+      document.getElementById('hoursVal').innerText = hours;
+      const weekly = hours * currentCalcRate;
+      document.getElementById('weeklyVal').innerText = weekly.toLocaleString('ro-RO') + ' RON';
+      document.getElementById('monthlyVal').innerText = (weekly * 4).toLocaleString('ro-RO') + ' RON';
+    }
+
+    // Modal Control Functions
+    function openCourierModal() {
+      document.getElementById('courierModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCourierModal() {
+      document.getElementById('courierModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function openRentalModal(modelName) {
+      document.getElementById('vehicleModelInput').value = modelName;
+      document.getElementById('selectedVehicleLabel').innerText = modelName;
+      document.getElementById('rentalModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeRentalModal() {
+      document.getElementById('rentalModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Courier Application Form Helpers
+    function selectPfa(val) {
+      document.getElementById('hasPfaInput').value = val;
+      document.getElementById('pfaYes').className = val==='da' ? "border-2 border-red-500 bg-red-500/10 rounded-xl p-2.5 text-center font-bold text-xs text-white" : "border border-gray-800 bg-gray-950 rounded-xl p-2.5 text-center font-bold text-xs text-white";
+      document.getElementById('pfaNo').className = val==='nu' ? "border-2 border-red-500 bg-red-500/10 rounded-xl p-2.5 text-center font-bold text-xs text-white" : "border border-gray-800 bg-gray-950 rounded-xl p-2.5 text-center font-bold text-xs text-white";
+      document.getElementById('pfaYesFields').classList.toggle('hidden', val !== 'da');
+      document.getElementById('pfaNoBanner').style.display = val==='nu' ? 'flex' : 'none';
+    }
+
+    function selectVeh(veh) {
+      document.getElementById('selectedVehicle').value = veh;
+      ['Car', 'Motorcycle', 'Bicycle', 'EBike'].forEach(v => {
+        const id = v==='Car'?'vCar':v==='Motorcycle'?'vMoto':v==='Bicycle'?'vBike':'vEBike';
+        document.getElementById(id).className = v===veh ? "border-2 border-red-500 bg-red-500/10 p-2.5 rounded-xl text-xs font-bold text-center text-white" : "border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-xs font-bold text-center text-gray-300";
+      });
+    }
+
+    function selectNeedRental(val) {
+      document.getElementById('needRentalInput').value = val;
+      document.getElementById('rentYes').className = val==='da' ? "border-2 border-red-500 bg-red-500/10 p-2 rounded-lg text-xs font-bold text-white" : "border border-gray-800 p-2 rounded-lg text-xs font-bold text-white";
+      document.getElementById('rentNo').className = val==='nu' ? "border-2 border-red-500 bg-red-500/10 p-2 rounded-lg text-xs font-bold text-white" : "border border-gray-800 p-2 rounded-lg text-xs font-bold text-white";
+      document.getElementById('rentalChoice').style.display = val==='da' ? 'block' : 'none';
+    }
+
+    // Firebase Form Submissions
+    async function submitApplication(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.innerHTML = 'Se trimite...';
+      
+      try {
+        const formData = new FormData(e.target);
+        const dataObj = {};
+        formData.forEach((value, key) => { dataObj[key] = value; });
+        
+        // Include checked platforms explicitly
+        dataObj.platforms = [];
+        if(e.target.glovo.checked) dataObj.platforms.push('Glovo');
+        if(e.target.bolt.checked) dataObj.platforms.push('Bolt');
+        if(e.target.wolt.checked) dataObj.platforms.push('Wolt');
+
+        dataObj.submittedAt = new Date();
+
+        await window.addDoc(window.collection(window.db, "courier_applications"), dataObj);
+
+        document.getElementById('applyForm').classList.add('hidden');
+        document.getElementById('applySuccessBox').classList.remove('hidden');
+      } catch (err) {
+        console.error(err);
+        alert('Eroare: ' + err.message);
+        btn.disabled = false; btn.innerHTML = 'TRIMITE CEREREA ÎN BURAQ FLEET';
+      }
+    }
+
+    async function handleRentalSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitRentalBtn'); btn.disabled = true; btn.innerHTML = 'Se trimite...';
+
+      try {
+        const form = e.target;
+        const fileInput = form.querySelector('input[type="file"]');
+        let fileUrl = "";
+
+        if (fileInput && fileInput.files[0]) {
+          const file = fileInput.files[0];
+          const storageRef = window.ref(window.storage, `licenses/${Date.now()}_${file.name}`);
+          const snapshot = await window.uploadBytes(storageRef, file);
+          fileUrl = await window.getDownloadURL(snapshot.ref);
+        }
+
+        const rentalData = {
+          clientName: form.client_name.value,
+          clientPhone: form.client_phone.value,
+          rentalCity: form.rental_city.value,
+          rentalDuration: form.rental_duration.value,
+          vehicleModel: form.requested_vehicle_model.value,
+          licenseFileUrl: fileUrl,
+          submittedAt: new Date()
+        };
+
+        await window.addDoc(window.collection(window.db, "rental_requests"), rentalData);
+
+        document.getElementById('rentalForm').classList.add('hidden');
+        document.getElementById('rentalSuccessState').classList.remove('hidden');
+      } catch (err) {
+        console.error(err);
+        alert('Eroare: ' + err.message);
+        btn.disabled = false; btn.innerHTML = 'TRIMITE CEREREA DE ÎNCHIRIERE';
+      }
+    }
+  </script>
+</body>
+</html>
