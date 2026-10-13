@@ -105,7 +105,6 @@
         
         <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
           
-          <!-- Platform Badges Header -->
           <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
             <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-900 border border-amber-300 px-3 py-1 rounded-full text-xs font-black tracking-wide shadow-sm">
               <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> GLOVO
@@ -420,13 +419,11 @@
         </button>
       </div>
 
-      <!-- Application Form (Using FormSubmit for 100% reliable direct email delivery) -->
-      <form id="applyForm" action="https://formsubmit.co/buraqsrl@gmail.com" method="POST" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)" class="p-5 sm:p-8 space-y-6">
+      <!-- Application Form -->
+      <form id="applyForm" onsubmit="handleFormSubmit(event)" class="p-5 sm:p-8 space-y-6">
         
-        <!-- FormSubmit configuration options -->
         <input type="hidden" name="_subject" value="Aplicație Nouă Curier - BURAQ Fleet">
         <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
 
         <!-- 1. Personal Info -->
         <div class="space-y-3">
@@ -513,11 +510,11 @@
           <div class="grid sm:grid-cols-2 gap-3 pt-2">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_front_id">Permis de Ședere / CI - Față *</label>
-              <input type="file" name="Permis_Fata" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
+              <input type="file" name="Permis_Fata" id="permitFront" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_back_id">Permis de Ședere / CI - Spate *</label>
-              <input type="file" name="Permis_Spate" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
+              <input type="file" name="Permis_Spate" id="permitBack" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
             </div>
           </div>
         </div>
@@ -611,7 +608,7 @@
   </div>
 
 
-  <!-- ================= MODAL 2: RENTAL REQUEST ================= -->
+  <!-- ================= MODAL 2: VEHICLE RENTAL REQUEST ================= -->
   <div id="rentalModal" class="fixed inset-0 z-50 hidden modal-backdrop overflow-y-auto p-3 sm:p-6 flex items-center justify-center">
     <div class="bg-white border border-slate-200 w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative my-auto text-slate-900">
       
@@ -632,26 +629,29 @@
         </button>
       </div>
 
-      <!-- Form Body -->
+      <!-- Rental Form Body (Dual-configured: Email + Firebase) -->
       <form id="rentalForm" onsubmit="handleRentalSubmit(event)" class="p-5 sm:p-6 space-y-4">
-        <input type="hidden" name="requested_vehicle_model" id="vehicleModelInput" value="">
+        
+        <input type="hidden" name="_subject" id="rentalSubjectInput" value="Solicitare Nouă Închiriere Vehicul - BURAQ">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="Model_Vehicul" id="vehicleModelInput" value="">
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_client_name">Nume Complet *</label>
-          <input type="text" name="client_name" required placeholder="ex: Ion Popescu" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
+          <input type="text" name="Nume_Client" required placeholder="ex: Ion Popescu" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_client_phone">Număr de Telefon *</label>
           <div class="flex">
             <span class="bg-slate-100 border border-r-0 border-slate-300 rounded-l-xl px-3 flex items-center text-xs text-slate-700 font-bold">🇷🇴 +40</span>
-            <input type="tel" name="client_phone" required placeholder="722 000 000" class="w-full bg-slate-50 border border-slate-300 rounded-r-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
+            <input type="tel" name="Telefon_Client" required placeholder="722 000 000" class="w-full bg-slate-50 border border-slate-300 rounded-r-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_rental_city">Oraș de Preluare *</label>
-          <select name="rental_city" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none font-bold">
+          <select name="Oras_Preluare" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none font-bold">
             <option value="Iasi (Activ)" selected>Iași (Disponibil Acum)</option>
             <option value="Bucuresti (Lista Asteptare)">București (Listă de așteptare)</option>
             <option value="Cluj-Napoca (Lista Asteptare)">Cluj-Napoca (Listă de așteptare)</option>
@@ -662,7 +662,7 @@
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_rental_duration">Perioada Dorită de Închiriere *</label>
-          <select name="rental_duration" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
+          <select name="Perioada_Inchiriere" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
             <option value="1 Saptamana" data-i18n="dur_1w">1 Săptămână</option>
             <option value="2 Saptamani" data-i18n="dur_2w">2 Săptămâni</option>
             <option value="1 Luna+" data-i18n="dur_1m">1 Lună sau mai mult</option>
@@ -671,7 +671,7 @@
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="lbl_license_upload">Încarcă Permis de Conducere / CI *</label>
-          <input type="file" id="rentalLicenseFile" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2.5 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
+          <input type="file" name="Permis_Sau_CI" id="rentalLicenseFile" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 file:mr-2.5 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-50 file:text-red-600">
         </div>
 
         <button type="submit" id="submitRentalBtn" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-extrabold py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-lg mt-2">
@@ -756,7 +756,7 @@
         btn_rent_scooter: "Request Scooter Rental", ebike_sub: "Deliveries without fuel expenses or license", btn_rent_ebike: "Request E-Bike Rental", 
         faq_title: "Frequently Asked Questions", faq_q1: "What is BURAQ's fleet commission?", faq_a1: "Our commission is only 10%, the most advantageous on the market for PFA collaboration with Glovo, Bolt Food, and Wolt.", 
         faq_q2: "How fast do I get paid?", faq_a2: "Payouts are made weekly directly to your bank account every Tuesday or Wednesday for the previous week.", 
-        footer_copy: "© 2026 BURAQ GROUP ALL RIGHTS RESERVED", 
+        footer_copy: "© 2026 BURAQ DELIVERY & RENTALS. Fleet Commission 10%.", 
         app_title: "BURAQ Courier Application Form", app_subtitle: "Direct PFA Collaboration • 10% Commission", 
         sec_1: "1. Personal Information", lbl_name: "Full Name *", lbl_phone: "Phone *", lbl_email: "Email *", lbl_cnp: "CNP (ID Number) *", lbl_city: "City *", city_placeholder: "-- Select City --",
         lbl_front_id: "Resident Permit / ID - Front *", lbl_back_id: "Resident Permit / ID - Back *", sec_2: "2. Collaboration Type (PFA)", 
@@ -813,13 +813,17 @@
       document.body.style.overflow = 'auto';
     }
 
+    // Dynamic Rental Modal opener
     function openRentalModal(modelName) {
       document.getElementById('rentalForm').classList.remove('hidden');
       document.getElementById('rentalSuccessState').classList.add('hidden');
       document.getElementById('submitRentalBtn').disabled = false;
       document.getElementById('submitRentalBtn').innerHTML = translations[currentLang]['btn_submit_rental'] || 'TRIMITE CEREREA DE ÎNCHIRIERE';
+      
       document.getElementById('vehicleModelInput').value = modelName;
       document.getElementById('selectedVehicleLabel').innerText = modelName;
+      document.getElementById('rentalSubjectInput').value = `Solicitare Închiriere (${modelName}) - BURAQ Fleet`;
+      
       document.getElementById('rentalModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
     }
@@ -861,7 +865,7 @@
       document.getElementById('rentalChoice').style.display = val==='da' ? 'block' : 'none';
     }
 
-    // Bulletproof Submission handler
+    // Courier Application Submission Handler
     async function handleFormSubmit(e) {
       e.preventDefault();
       const form = e.target;
@@ -869,11 +873,16 @@
       btn.disabled = true;
       btn.innerHTML = 'Se trimite...';
 
-      // 1. Gather data and save to Firebase Firestore
+      const formData = new FormData(form);
+
+      // 1. Save to Firebase
       try {
-        const formData = new FormData(form);
         const dataObj = {};
-        formData.forEach((value, key) => { if(typeof value === 'string') dataObj[key] = value; });
+        formData.forEach((value, key) => { 
+          if(typeof value === 'string') dataObj[key] = value; 
+        });
+        dataObj.permitFrontName = document.getElementById('permitFront').files[0]?.name || 'N/A';
+        dataObj.permitBackName = document.getElementById('permitBack').files[0]?.name || 'N/A';
         dataObj.submittedAt = new Date();
 
         if(window.addDoc && window.collection && window.db) {
@@ -883,26 +892,40 @@
         console.warn("Firebase save notice:", err);
       }
 
-      // 2. Submit via native form post to send email directly to buraqsrl@gmail.com
-      form.submit();
+      // 2. Send via Email in Background
+      try {
+        await fetch('https://formsubmit.co/ajax/buraqsrl@gmail.com', {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+      } catch(err) {
+        console.warn("Email delivery notice:", err);
+      }
+
+      form.classList.add('hidden');
+      document.getElementById('applySuccessBox').classList.remove('hidden');
     }
 
+    // Rental Submission Handler (Dual Email + Firebase)
     async function handleRentalSubmit(e) {
       e.preventDefault();
+      const form = e.target;
       const btn = document.getElementById('submitRentalBtn'); 
       btn.disabled = true; 
       btn.innerHTML = 'Se trimite...';
 
-      try {
-        const form = e.target;
-        const licenseFileName = document.getElementById('rentalLicenseFile').files[0]?.name || 'N/A';
+      const formData = new FormData(form);
 
+      // 1. Save to Firebase
+      try {
+        const licenseFileName = document.getElementById('rentalLicenseFile').files[0]?.name || 'N/A';
         const rentalData = {
-          clientName: form.client_name.value,
-          clientPhone: form.client_phone.value,
-          rentalCity: form.rental_city.value,
-          rentalDuration: form.rental_duration.value,
-          vehicleModel: form.requested_vehicle_model.value,
+          clientName: form.Nume_Client.value,
+          clientPhone: form.Telefon_Client.value,
+          rentalCity: form.Oras_Preluare.value,
+          rentalDuration: form.Perioada_Inchiriere.value,
+          vehicleModel: form.Model_Vehicul.value,
           licenseFileName: licenseFileName,
           submittedAt: new Date()
         };
@@ -910,15 +933,23 @@
         if(window.addDoc && window.collection && window.db) {
           await window.addDoc(window.collection(window.db, "rental_requests"), rentalData);
         }
-
-        form.classList.add('hidden');
-        document.getElementById('rentalSuccessState').classList.remove('hidden');
       } catch (err) {
-        console.error(err);
-        alert('Eroare: ' + err.message);
-        btn.disabled = false; 
-        btn.innerHTML = 'TRIMITE CEREREA DE ÎNCHIRIERE';
+        console.warn("Firebase rental notice:", err);
       }
+
+      // 2. Send Email in Background
+      try {
+        await fetch('https://formsubmit.co/ajax/buraqsrl@gmail.com', {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+      } catch(err) {
+        console.warn("Rental email notice:", err);
+      }
+
+      form.classList.add('hidden');
+      document.getElementById('rentalSuccessState').classList.remove('hidden');
     }
   </script>
 </body>
