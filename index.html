@@ -272,12 +272,16 @@
       <!-- Vehicle Cards Grid -->
       <div class="grid md:grid-cols-3 gap-6 pt-4">
         
-        <!-- DACIA SPRING -->
-        <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
+        <!-- DACIA SPRING (Tagged as Coming Soon) -->
+        <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 transition flex flex-col justify-between space-y-5 shadow-sm opacity-90 hover:shadow-xl">
           <div class="space-y-4">
             <div class="bg-white rounded-2xl p-8 text-center border border-slate-200 relative">
-              <span class="absolute top-3 right-3 bg-red-50 border border-red-200 text-red-600 text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase">100% Electric</span>
-              <i data-lucide="car" class="w-16 h-16 text-red-600 mx-auto"></i>
+              <!-- Coming Soon Badge -->
+              <span class="absolute top-3 right-3 bg-amber-100 border border-amber-300 text-amber-800 text-[10px] px-2.5 py-0.5 rounded-full font-black uppercase tracking-wide flex items-center gap-1 shadow-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                <span data-i18n="badge_coming_soon">ÎN CURÂND</span>
+              </span>
+              <i data-lucide="car" class="w-16 h-16 text-slate-400 mx-auto"></i>
             </div>
             <div>
               <h3 class="text-xl font-bold text-slate-900">Dacia Spring EV</h3>
@@ -286,16 +290,16 @@
             <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_range">Autonomie:</span> <span class="font-bold">220 km</span></div>
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesar:</span> <span class="font-bold">Cat. B</span></div>
-              <div class="flex justify-between border-t border-slate-100 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Locație:</span> <span class="font-bold text-emerald-600">Iași</span></div>
+              <div class="flex justify-between border-t border-slate-100 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Locație:</span> <span class="font-bold text-amber-600">Iași (Curând)</span></div>
             </div>
           </div>
-          <button onclick="openRentalModal('Dacia Spring EV')" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-md">
-            <span data-i18n="btn_rent_car">Solicită Închiriere Auto</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          <button disabled class="w-full bg-slate-300 text-slate-600 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 cursor-not-allowed">
+            <span data-i18n="btn_coming_soon">ÎN CURÂND</span>
+            <i data-lucide="clock" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <!-- SCOOTER -->
+        <!-- SCOOTERS -->
         <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
           <div class="space-y-4">
             <div class="bg-white rounded-2xl p-8 text-center border border-slate-200 relative">
@@ -303,16 +307,16 @@
               <i data-lucide="bike" class="w-16 h-16 text-amber-600 mx-auto"></i>
             </div>
             <div>
-              <h3 class="text-xl font-bold text-slate-900">Scuter 125cc</h3>
+              <h3 class="text-xl font-bold text-slate-900">Scutere GAMA SYM</h3>
               <p class="text-xs text-slate-500" data-i18n="scooter_sub">Treci rapid prin traficul aglomerat din oraș</p>
             </div>
             <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
-              <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_consump">Consum:</span> <span class="font-bold">2.2 L / 100km</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Modele Disponibile:</span> <span class="font-bold text-slate-900">Gama SYM JETX & Symphony</span></div>
               <div class="flex justify-between"><span class="text-slate-500" data-i18n="spec_license">Permis Necesar:</span> <span class="font-bold">Cat. A1 / A / B</span></div>
               <div class="flex justify-between border-t border-slate-100 pt-1.5"><span class="text-slate-500" data-i18n="spec_city">Locație:</span> <span class="font-bold text-emerald-600">Iași</span></div>
             </div>
           </div>
-          <button onclick="openRentalModal('Scuter 125cc')" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-md">
+          <button onclick="openRentalModal('Scuter SYM')" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-md">
             <span data-i18n="btn_rent_scooter">Solicită Închiriere Scuter</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
@@ -386,7 +390,7 @@
         </svg>
         <span class="text-base font-black text-white italic">BURAQ DELIVERY & RENTALS</span>
       </div>
-      <p class="text-center sm:text-right" data-i18n="footer_copy">© 2026 BURAQ GROUP ALL RIGHTS RESERVED.</p>
+      <p class="text-center sm:text-right" data-i18n="footer_copy">© 2026 BURAQ DELIVERY & RENTALS. Comision flotă 10%.</p>
     </div>
   </footer>
 
@@ -564,10 +568,12 @@
               <button type="button" onclick="selectNeedRental('nu')" id="rentNo" class="border-2 border-red-600 bg-red-50 p-2 rounded-lg text-xs font-bold text-red-700" data-i18n="pfa_no">NU</button>
             </div>
             <div id="rentalChoice" class="hidden pt-2">
-              <select name="Model_Inchiriat" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs text-slate-900">
-                <option value="Dacia Spring EV">Dacia Spring EV (Auto - Iași)</option>
-                <option value="Scuter 125cc">Scuter 125cc (Iași)</option>
-                <option value="E-Bike Pro">E-Bike Pro (Iași)</option>
+              <select name="Model_Inchiriat" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs text-slate-900 font-semibold">
+                <option value="SYM JETX 14 EVO 125">SYM JETX 14 EVO 125 (Scuter)</option>
+                <option value="SYM JETX 125">SYM JETX 125 (Scuter)</option>
+                <option value="SYM SYMPHONY ST 200">SYM SYMPHONY ST 200 (Scuter)</option>
+                <option value="SYM CARGO SYMPHONY">SYM CARGO SYMPHONY (Scuter)</option>
+                <option value="E-Bike Pro Delivery">E-Bike Pro Delivery</option>
               </select>
             </div>
           </div>
@@ -620,7 +626,7 @@
           </div>
           <div>
             <h3 class="text-base font-extrabold text-slate-900 leading-tight" data-i18n="modal_title">Formular Închiriere Vehicul</h3>
-            <p class="text-xs text-red-600 font-bold" id="selectedVehicleLabel">Dacia Spring EV</p>
+            <p class="text-xs text-red-600 font-bold" id="selectedVehicleLabel">Scutere Gama SYM</p>
           </div>
         </div>
 
@@ -629,10 +635,10 @@
         </button>
       </div>
 
-      <!-- Rental Form Body (Dual-configured: Email + Firebase) -->
+      <!-- Rental Form Body -->
       <form id="rentalForm" onsubmit="handleRentalSubmit(event)" class="p-5 sm:p-6 space-y-4">
         
-        <input type="hidden" name="_subject" id="rentalSubjectInput" value="Solicitare Nouă Închiriere Vehicul - BURAQ">
+        <input type="hidden" name="_subject" id="rentalSubjectInput" value="Solicitare Închiriere Vehicul - BURAQ">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="Model_Vehicul" id="vehicleModelInput" value="">
 
@@ -647,6 +653,17 @@
             <span class="bg-slate-100 border border-r-0 border-slate-300 rounded-l-xl px-3 flex items-center text-xs text-slate-700 font-bold">🇷🇴 +40</span>
             <input type="tel" name="Telefon_Client" required placeholder="722 000 000" class="w-full bg-slate-50 border border-slate-300 rounded-r-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none">
           </div>
+        </div>
+
+        <!-- Dynamic Scooter Models Dropdown (Shown when scooter rental requested) -->
+        <div id="scooterModelContainer" class="hidden">
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Model Scuter Dorit *</label>
+          <select name="Model_Scuter_Specific" id="scooterModelSelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:border-red-600 outline-none font-bold">
+            <option value="SYM JETX 14 EVO 125">SYM JETX 14 EVO 125</option>
+            <option value="SYM JETX 125">SYM JETX 125</option>
+            <option value="SYM SYMPHONY ST 200">SYM SYMPHONY ST 200</option>
+            <option value="SYM CARGO SYMPHONY">SYM CARGO SYMPHONY</option>
+          </select>
         </div>
 
         <div>
@@ -734,7 +751,8 @@
         success_desc: "Echipa BURAQ vă va contacta în cel mai scurt timp.", modal_title: "Formular Închiriere Vehicul", lbl_client_name: "Nume Complet *", 
         lbl_client_phone: "Număr de Telefon *", lbl_rental_city: "Oraș de Preluare *", city_note: "* Închirierile sunt disponibile momentan doar în Iași.", 
         lbl_rental_duration: "Perioada Dorită de Închiriere *", dur_1w: "1 Săptămână", dur_2w: "2 Săptămâni", dur_1m: "1 Lună sau mai mult", 
-        lbl_license_upload: "Încarcă Permis de Conducere / CI *", btn_submit_rental: "TRIMITE CEREREA DE ÎNCHIRIERE"
+        lbl_license_upload: "Încarcă Permis de Conducere / CI *", btn_submit_rental: "TRIMITE CEREREA DE ÎNCHIRIERE",
+        badge_coming_soon: "ÎN CURÂND", btn_coming_soon: "ÎN CURÂND"
       },
       en: {
         nav_subtitle: "Delivery & Rentals",
@@ -767,7 +785,8 @@
         success_desc: "The BURAQ team will contact you shortly.", modal_title: "Vehicle Rental Form", lbl_client_name: "Full Name *", 
         lbl_client_phone: "Phone Number *", lbl_rental_city: "Pickup City *", city_note: "* Rentals are currently active only in Iași.", 
         lbl_rental_duration: "Desired Rental Period *", dur_1w: "1 Week", dur_2w: "2 Weeks", dur_1m: "1 Month or more", 
-        lbl_license_upload: "Upload Driving License / ID *", btn_submit_rental: "SUBMIT RENTAL REQUEST"
+        lbl_license_upload: "Upload Driving License / ID *", btn_submit_rental: "SUBMIT RENTAL REQUEST",
+        badge_coming_soon: "COMING SOON", btn_coming_soon: "COMING SOON"
       }
     };
 
@@ -813,7 +832,7 @@
       document.body.style.overflow = 'auto';
     }
 
-    // Dynamic Rental Modal opener
+    // Dynamic Rental Modal opener with Scooter Model dropdown support
     function openRentalModal(modelName) {
       document.getElementById('rentalForm').classList.remove('hidden');
       document.getElementById('rentalSuccessState').classList.add('hidden');
@@ -822,7 +841,14 @@
       
       document.getElementById('vehicleModelInput').value = modelName;
       document.getElementById('selectedVehicleLabel').innerText = modelName;
-      document.getElementById('rentalSubjectInput').value = `Solicitare Închiriere (${modelName}) - BURAQ Fleet`;
+
+      // Show specific scooter options list if scooter is selected
+      const scooterBox = document.getElementById('scooterModelContainer');
+      if (modelName.toLowerCase().includes('scuter') || modelName.toLowerCase().includes('sym')) {
+        scooterBox.classList.remove('hidden');
+      } else {
+        scooterBox.classList.add('hidden');
+      }
       
       document.getElementById('rentalModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
@@ -865,7 +891,7 @@
       document.getElementById('rentalChoice').style.display = val==='da' ? 'block' : 'none';
     }
 
-    // Courier Application Submission Handler
+    // Courier Application Handler (Dynamic Subject for Gmail Threading)
     async function handleFormSubmit(e) {
       e.preventDefault();
       const form = e.target;
@@ -873,9 +899,13 @@
       btn.disabled = true;
       btn.innerHTML = 'Se trimite...';
 
+      const applicantName = form.querySelector('[name="Nume"]').value || 'Nou';
+      const timestamp = new Date().toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+      
+      form.querySelector('[name="_subject"]').value = `Aplicație Curier: ${applicantName} (${timestamp})`;
+
       const formData = new FormData(form);
 
-      // 1. Save to Firebase
       try {
         const dataObj = {};
         formData.forEach((value, key) => { 
@@ -892,7 +922,6 @@
         console.warn("Firebase save notice:", err);
       }
 
-      // 2. Send via Email in Background
       try {
         await fetch('https://formsubmit.co/ajax/buraqsrl@gmail.com', {
           method: 'POST',
@@ -907,7 +936,7 @@
       document.getElementById('applySuccessBox').classList.remove('hidden');
     }
 
-    // Rental Submission Handler (Dual Email + Firebase)
+    // Rental Submission Handler (Dynamic Subject + Scooter Model Choice)
     async function handleRentalSubmit(e) {
       e.preventDefault();
       const form = e.target;
@@ -915,9 +944,20 @@
       btn.disabled = true; 
       btn.innerHTML = 'Se trimite...';
 
+      const clientName = form.querySelector('[name="Nume_Client"]').value || 'Client';
+      let vehicleModel = form.querySelector('#vehicleModelInput').value || 'Vehicul';
+      
+      // Append specific scooter model if selected
+      const scooterSelect = document.getElementById('scooterModelSelect');
+      if (!document.getElementById('scooterModelContainer').classList.contains('hidden')) {
+        vehicleModel += ` (${scooterSelect.value})`;
+      }
+
+      const timestamp = new Date().toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+      form.querySelector('#rentalSubjectInput').value = `Închiriere ${vehicleModel}: ${clientName} (${timestamp})`;
+
       const formData = new FormData(form);
 
-      // 1. Save to Firebase
       try {
         const licenseFileName = document.getElementById('rentalLicenseFile').files[0]?.name || 'N/A';
         const rentalData = {
@@ -925,7 +965,8 @@
           clientPhone: form.Telefon_Client.value,
           rentalCity: form.Oras_Preluare.value,
           rentalDuration: form.Perioada_Inchiriere.value,
-          vehicleModel: form.Model_Vehicul.value,
+          vehicleModel: vehicleModel,
+          scooterSpecificModel: scooterSelect ? scooterSelect.value : 'N/A',
           licenseFileName: licenseFileName,
           submittedAt: new Date()
         };
@@ -937,7 +978,6 @@
         console.warn("Firebase rental notice:", err);
       }
 
-      // 2. Send Email in Background
       try {
         await fetch('https://formsubmit.co/ajax/buraqsrl@gmail.com', {
           method: 'POST',
