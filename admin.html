@@ -249,7 +249,22 @@
         err.innerText = "Autentificare eșuată: Verificați datele introduse.";
         err.classList.remove('hidden');
       }
-    }
+    }async function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const pass = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  err.classList.add('hidden');
+
+  try {
+    await window.signInWithEmailAndPassword(window.auth, email, pass);
+  } catch (error) {
+    console.error("Full Firebase Error Object:", error);
+    // This will print the precise reason on your screen (e.g., auth/wrong-password, auth/user-not-found, auth/too-many-requests)
+    err.innerText = `Eroare: ${error.code} - ${error.message}`;
+    err.classList.remove('hidden');
+  }
+}
 
     function handleLogout() {
       window.signOut(window.auth);
