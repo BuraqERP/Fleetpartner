@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BURAQ Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Firebase Modular SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, getDocs, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBoOBoJU3KwebaTQOf-mOc6bxUOt3KyEgU",
+      authDomain: "partner-6e0a9.firebaseapp.com",
+      projectId: "partner-6e0a9",
+      storageBucket: "partner-6e0a9.firebasestorage.app",
+      messagingSenderId: "1093800021119",
+      appId: "1:1093800021119:web:6d3945abaf8116a958c34a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.auth = auth;
+    window.db = db;
+    window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    window.signOut = signOut;
+    window.doc = doc;
+    window.setDoc = setDoc;
+    window.getDoc = getDoc;
+    window.collection = collection;
+    window.getDocs = getDocs;
+    window.addDoc = addDoc;
+    window.deleteDoc = deleteDoc;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.remove('hidden');
+        loadAllAdminData();
+      } else {
+        document.getElementById('loginSection').classList.remove('hidden');
+        document.getElementById('adminDashboard').classList.add('hidden');
+      }
+    });
+  </script>
+</head>
+<body class="bg-slate-100 text-slate-900 font-sans min-h-screen">
+
+  <!-- ================= LOGIN SECTION ================= -->
+  <div id="loginSection" class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md space-y-6 border border-slate-200">
+      <div class="text-center space-y-2">
+        <h2 class="text-2xl font-black italic text-slate-900">BURAQ FLEET</h2>
+        <p class="text-xs text-slate-500 uppercase tracking-widest font-bold">Admin Control Panel</p>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email Administrator</label>
+          <input type="email" id="loginEmail" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-600">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Parolă</label>
+          <input type="password" id="loginPass" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-600">
+        </div>
+        <p id="loginError" class="text-xs text-red-600 hidden font-bold text-center"></p>
+        <button type="submit" id="loginBtn" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-extrabold py-3 rounded-xl transition text-sm shadow-md">
+          AUTENTIFICARE ADMIN
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ================= DASHBOARD SECTION ================= -->
+  <div id="adminDashboard" class="hidden min-h-screen flex flex-col">
+    
+    <!-- Top Nav -->
+    <header class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between shadow-md">
+      <div class="flex items-center gap-3">
+        <span class="text-xl font-black italic tracking-wider">BURAQ CONTROL PANEL</span>
+        <span class="bg-red-600 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">Live Admin</span>
+      </div>
+      <button onclick="handleLogout()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+        <i data-lucide="log-out" class="w-4 h-4"></i> Deconectare
+      </button>
+    </header>
+
+    <div class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-8">
+      
+      <!-- SECTION 1: GLOBAL SITE SETTINGS & ANNOUNCEMENTS -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="border-b border-slate-100 pb-4 flex items-center justify-between">
+          <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+            <i data-lucide="settings" class="text-red-600 w-5 h-5"></i> Settings & Announcements
+          </h3>
+          <span class="text-xs text-slate-400">Updates sync instantly on partner.buraq.ro</span>
+        </div>
+
+        <form onsubmit="saveSiteSettings(event)" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Fleet Commission %</label>
+            <input type="text" id="setCommission" placeholder="10%" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp Support Number</label>
+            <input type="text" id="setWhatsapp" placeholder="40773420491" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Contact Email</label>
+            <input type="email" id="setEmail" placeholder="buraqsrl@gmail.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+          </div>
+          
+          <div class="sm:col-span-2 lg:col-span-3">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Top Announcement Banner Text (Leave blank to hide)</label>
+            <input type="text" id="setAnnouncement" placeholder="ex: 🚀 Angajăm curieri în Iași, Cluj și București! Înscrie-te azi!" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+          </div>
+
+          <div class="sm:col-span-2 lg:col-span-3 pt-2">
+            <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow">
+              SALVEAZĂ SETĂRILE SITE-ULUI
+            </button>
+          </div>
+        </form>
+      </div>
+
+
+      <!-- SECTION 2: FLEET VEHICLE INVENTORY MANAGEMENT -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="border-b border-slate-100 pb-4 flex items-center justify-between">
+          <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+            <i data-lucide="truck" class="text-red-600 w-5 h-5"></i> Rental Fleet Management
+          </h3>
+          <button onclick="toggleAddVehicleModal()" class="bg-[#E51B24] hover:bg-red-700 text-white text-xs font-extrabold px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+            <i data-lucide="plus" class="w-4 h-4"></i> ADAUGĂ VEHICUL NOU
+          </button>
+        </div>
+
+        <!-- Vehicle List Grid -->
+        <div id="vehicleListGrid" class="grid md:grid-cols-3 gap-4">
+          <p class="text-xs text-slate-400 col-span-3 text-center py-4">Loading fleet inventory...</p>
+        </div>
+      </div>
+
+
+      <!-- SECTION 3: RECENT COURIER & RENTAL APPLICATIONS -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="border-b border-slate-100 pb-4 flex items-center justify-between">
+          <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+            <i data-lucide="file-text" class="text-red-600 w-5 h-5"></i> Recent Submissions Database
+          </h3>
+          <button onclick="loadSubmissions()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-bold border border-slate-300">
+            Reîmprospătează
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase font-extrabold">
+                <th class="p-3">Tip</th>
+                <th class="p-3">Nume</th>
+                <th class="p-3">Telefon</th>
+                <th class="p-3">Oraș / Detalii</th>
+                <th class="p-3">Data</th>
+              </tr>
+            </thead>
+            <tbody id="submissionsTableBody" class="divide-y divide-slate-100">
+              <tr><td colspan="5" class="p-4 text-center text-slate-400">Loading submissions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ADD VEHICLE MODAL -->
+  <div id="addVehicleModal" class="fixed inset-0 z-50 hidden modal-backdrop bg-slate-900/60 backdrop-blur-sm p-4 flex items-center justify-center">
+    <div class="bg-white border border-slate-200 w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl relative">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h4 class="font-extrabold text-slate-900">Adaugă Vehicul în Flotă</h4>
+        <button onclick="toggleAddVehicleModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form onsubmit="handleAddVehicle(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nume Vehicul / Model *</label>
+          <input type="text" id="vehName" required placeholder="ex: SYM JETX 125" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-xs">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Tip Vehicul *</label>
+            <select id="vehType" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold">
+              <option value="Scooter">Scuter</option>
+              <option value="Car">Mașină</option>
+              <option value="EBike">E-Bike</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Status Disponibilitate *</label>
+            <select id="vehStatus" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold">
+              <option value="Available">Disponibil Acum</option>
+              <option value="Coming Soon">În Curând</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Oraș / Locație</label>
+            <input type="text" id="vehCity" value="Iași" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Permis Necesar</label>
+            <input type="text" id="vehLicense" placeholder="Cat. B / Cat. A1" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-xs">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-extrabold py-3 rounded-xl transition text-xs shadow mt-2">
+          SALVEAZĂ VEHICULUL ÎN BAZA DE DATE
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ================= JAVASCRIPT CONTROL LOGIC ================= -->
+  <script>
+    lucide.createIcons();
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPass').value;
+      const err = document.getElementById('loginError');
+      err.classList.add('hidden');
+
+      try {
+        await window.signInWithEmailAndPassword(window.auth, email, pass);
+      } catch (error) {
+        err.innerText = "Autentificare eșuată: Verificați datele introduse.";
+        err.classList.remove('hidden');
+      }
+    }
+
+    function handleLogout() {
+      window.signOut(window.auth);
+    }
+
+    function toggleAddVehicleModal() {
+      document.getElementById('addVehicleModal').classList.toggle('hidden');
+    }
+
+    async function loadAllAdminData() {
+      loadSettings();
+      loadFleetVehicles();
+      loadSubmissions();
+    }
+
+    // Settings Handler
+    async function loadSettings() {
+      try {
+        const snap = await window.getDoc(window.doc(window.db, "site_settings", "general"));
+        if(snap.exists()) {
+          const data = snap.data();
+          document.getElementById('setCommission').value = data.commission || '10%';
+          document.getElementById('setWhatsapp').value = data.whatsapp || '40773420491';
+          document.getElementById('setEmail').value = data.email || 'buraqsrl@gmail.com';
+          document.getElementById('setAnnouncement').value = data.announcement || '';
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    async function saveSiteSettings(e) {
+      e.preventDefault();
+      try {
+        await window.setDoc(window.doc(window.db, "site_settings", "general"), {
+          commission: document.getElementById('setCommission').value,
+          whatsapp: document.getElementById('setWhatsapp').value,
+          email: document.getElementById('setEmail').value,
+          announcement: document.getElementById('setAnnouncement').value,
+          updatedAt: new Date()
+        });
+        alert('Setările au fost salvate cu succes!');
+      } catch(e) { alert('Eroare: ' + e.message); }
+    }
+
+    // Fleet Inventory Management
+    async function loadFleetVehicles() {
+      const grid = document.getElementById('vehicleListGrid');
+      grid.innerHTML = '<p class="text-xs text-slate-400 col-span-3 text-center">Loading fleet...</p>';
+
+      try {
+        const querySnap = await window.getDocs(window.collection(window.db, "fleet_vehicles"));
+        if(querySnap.empty) {
+          grid.innerHTML = '<p class="text-xs text-slate-400 col-span-3 text-center py-4">Nu există vehicule custom înregistrate. Flota default este afișată pe site.</p>';
+          return;
+        }
+
+        let html = '';
+        querySnap.forEach(docSnap => {
+          const v = docSnap.data();
+          const id = docSnap.id;
+          html += `
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex flex-col justify-between space-y-3">
+              <div>
+                <div class="flex justify-between items-start mb-2">
+                  <span class="text-xs font-extrabold uppercase px-2 py-0.5 rounded ${v.status === 'Available' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${v.status}</span>
+                  <span class="text-[10px] text-slate-400 font-bold">${v.type}</span>
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm">${v.name}</h4>
+                <p class="text-xs text-slate-500">Locație: ${v.city || 'Iași'} • Permis: ${v.license || 'N/A'}</p>
+              </div>
+              <button onclick="deleteVehicle('${id}')" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold py-1.5 px-3 rounded-xl border border-red-200 text-center transition">
+                Șterge Vehicul
+              </button>
+            </div>
+          `;
+        });
+        grid.innerHTML = html;
+      } catch(e) { console.error(e); }
+    }
+
+    async function handleAddVehicle(e) {
+      e.preventDefault();
+      try {
+        await window.addDoc(window.collection(window.db, "fleet_vehicles"), {
+          name: document.getElementById('vehName').value,
+          type: document.getElementById('vehType').value,
+          status: document.getElementById('vehStatus').value,
+          city: document.getElementById('vehCity').value,
+          license: document.getElementById('vehLicense').value,
+          createdAt: new Date()
+        });
+        toggleAddVehicleModal();
+        loadFleetVehicles();
+      } catch(e) { alert('Eroare: ' + e.message); }
+    }
+
+    async function deleteVehicle(id) {
+      if(confirm('Sigur doriți să ștergeți acest vehicul?')) {
+        await window.deleteDoc(window.doc(window.db, "fleet_vehicles", id));
+        loadFleetVehicles();
+      }
+    }
+
+    // Applications Viewer
+    async function loadSubmissions() {
+      const tbody = document.getElementById('submissionsTableBody');
+      tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-400">Loading submissions...</td></tr>';
+
+      try {
+        let rows = '';
+        const couriers = await window.getDocs(window.collection(window.db, "courier_applications"));
+        couriers.forEach(d => {
+          const c = d.data();
+          rows += `<tr class="hover:bg-slate-50"><td class="p-3"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold">Curier</span></td><td class="p-3 font-bold">${c.Nume || 'N/A'}</td><td class="p-3">${c.Telefon || 'N/A'}</td><td class="p-3">${c.Oras || 'N/A'}</td><td class="p-3 text-slate-400">${c.submittedAt ? new Date(c.submittedAt.seconds*1000).toLocaleDateString('ro-RO') : 'Azi'}</td></tr>`;
+        });
+
+        const rentals = await window.getDocs(window.collection(window.db, "rental_requests"));
+        rentals.forEach(d => {
+          const r = d.data();
+          rows += `<tr class="hover:bg-slate-50"><td class="p-3"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">Închiriere</span></td><td class="p-3 font-bold">${r.clientName || 'N/A'}</td><td class="p-3">${r.clientPhone || 'N/A'}</td><td class="p-3">${r.vehicleModel || 'N/A'}</td><td class="p-3 text-slate-400">${r.submittedAt ? new Date(r.submittedAt.seconds*1000).toLocaleDateString('ro-RO') : 'Azi'}</td></tr>`;
+        });
+
+        tbody.innerHTML = rows || '<tr><td colspan="5" class="p-4 text-center text-slate-400">Nicio aplicație găsită.</td></tr>';
+      } catch(e) { console.error(e); }
+    }
+  </script>
+</body>
+</html>
