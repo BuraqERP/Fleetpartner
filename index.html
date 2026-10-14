@@ -298,7 +298,6 @@
             <i data-lucide="clock" class="w-4 h-4"></i>
           </button>
         </div>
-        <div id="fleetContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         <!-- SCOOTERS -->
         <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
@@ -992,67 +991,69 @@
       form.classList.add('hidden');
       document.getElementById('rentalSuccessState').classList.remove('hidden');
     }
-  </script>
+  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, doc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBoOBoJU3KWebaTQOf-mOc6bxUOt3KyEgU",
-  authDomain: "partner-6e0a9.firebaseapp.com",
-  projectId: "partner-6e0a9",
-  storageBucket: "partner-6e0a9.firebasestorage.app",
-  messagingSenderId: "1093800021119",
-  appId: "1:1093800021119:web:6d3945abaf8116a958c34a"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyBoOBoJU3KWebaTQOf-mOc6bxUOt3KyEgU",
+    authDomain: "partner-6e0a9.firebaseapp.com",
+    projectId: "partner-6e0a9",
+    storageBucket: "partner-6e0a9.firebasestorage.app",
+    messagingSenderId: "1093800021119",
+    appId: "1:1093800021119:web:6d3945abaf8116a958c34a"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-// 1. Sync Settings & Announcements
-onSnapshot(doc(db, "settings", "config"), (docSnap) => {
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    if (data.announcement) {
+  // Sync Announcements
+  onSnapshot(doc(db, "settings", "config"), (docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data();
       const banner = document.getElementById('announcementBanner');
-      if (banner) {
+      if (banner && data.announcement) {
         banner.innerText = data.announcement;
-        banner.parentElement.classList.remove('hidden');
+        if (banner.parentElement) banner.parentElement.classList.remove('hidden');
       }
     }
-  }
-});
-
-// 2. Sync Rental Vehicles
-onSnapshot(collection(db, "vehicles"), (snapshot) => {
-  const container = document.getElementById('fleetContainer'); // ensure your fleet cards container has id="fleetContainer"
-  if (!container || snapshot.empty) return;
-
-  let html = '';
-  snapshot.forEach((doc) => {
-    const item = doc.data();
-    html += `
-      <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between">
-        <div>
-          <div class="bg-slate-50 rounded-2xl p-6 text-center mb-6 relative">
-            <span class="absolute top-4 right-4 bg-amber-50 text-amber-600 text-xs font-bold px-3 py-1 rounded-full border border-amber-200/50">${item.badge || 'DISPONIBIL'}</span>
-            <img src="${item.image || 'https://via.placeholder.com/300'}" alt="${item.title}" class="h-32 mx-auto object-contain">
-          </div>
-          <h3 class="text-2xl font-bold text-slate-900 mb-1">${item.title}</h3>
-          <p class="text-slate-500 text-sm mb-6">${item.subtitle || ''}</p>
-          <div class="bg-slate-50 rounded-2xl p-4 space-y-3 mb-6 text-sm">
-            <div class="flex justify-between"><span class="text-slate-400">Modele Disponibile:</span><span class="font-bold text-slate-800">${item.models || '-'}</span></div>
-            <div class="flex justify-between"><span class="text-slate-400">Permis Necesar:</span><span class="font-bold text-slate-800">${item.license || '-'}</span></div>
-            <div class="flex justify-between"><span class="text-slate-400">Locație:</span><span class="font-bold text-emerald-600">${item.location || '-'}</span></div>
-          </div>
-        </div>
-        <button onclick="openRentalModal('${item.title}')" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2">
-          <span>Solicită Închiriere</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </button>
-      </div>
-    `;
   });
-  container.innerHTML = html;
-});
+
+  // Sync Vehicles without breaking CSS Grid layout
+  onSnapshot(collection(db, "vehicles"), (snapshot) => {
+    const container = document.getElementById('fleetContainer');
+    if (!container || snapshot.empty) return;
+
+    let html = '';
+    snapshot.forEach((docSnap) => {
+      const item = docSnap.data();
+      html += `
+        <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 transition flex flex-col justify-between space-y-5 shadow-sm hover:shadow-xl">
+          <div class="space-y-4">
+            <div class="bg-white rounded-2xl p-8 text-center border border-slate-200 relative">
+              <span class="absolute top-3 right-3 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase">${item.badge || 'AGIL & RAPID'}</span>
+              <i data-lucide="bike" class="w-16 h-16 text-amber-600 mx-auto"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">${item.name || item.title || 'Scutere 125 & 50 cc'}</h3>
+              <p class="text-xs text-slate-500">${item.description || item.subtitle || 'Treci rapid prin traficul aglomerat din oraș'}</p>
+            </div>
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+              <div class="flex justify-between"><span class="text-slate-500">Modele Disponibile:</span><span class="font-bold text-slate-900">${item.models || 'Gama SYM JETX & Symphony'}</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Permis Necesar:</span><span class="font-bold">${item.license || 'Cat. A1 / A / B'}</span></div>
+              <div class="flex justify-between border-t border-slate-100 pt-1.5"><span class="text-slate-500">Locație:</span><span class="font-bold text-emerald-600">${item.location || 'Iași'}</span></div>
+            </div>
+          </div>
+          <button onclick="if(window.openRentalModal) window.openRentalModal('${item.name || item.title}')" class="w-full bg-[#E51B24] hover:bg-red-700 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2">
+            <span>Solicită Închiriere Scuter</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+    if (window.lucide) window.lucide.createIcons();
+  });
+</script>
 </body>
 </html>
